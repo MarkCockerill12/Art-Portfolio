@@ -28,6 +28,8 @@ const softwareOptions: NonNullable<Artwork["software"]>[] = [
   "Procreate",
   "Blender",
   "Krita",
+  "Sketchbook",
+  "Gale",
   "Other",
 ]
 
@@ -40,6 +42,7 @@ const genreOptions: NonNullable<Artwork["genre"]>[] = [
   "Study",
   "Illustration",
   "Sketch",
+  "Pixel Art",
 ]
 
 export function FilterPanel({ filters, onFilterChange }: FilterPanelProps) {

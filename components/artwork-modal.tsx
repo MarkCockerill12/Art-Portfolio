@@ -179,15 +179,37 @@ export function ArtworkModal({ artwork, open, onOpenChange }: ArtworkModalProps)
               <div
                 ref={imageRef}
                 className={`relative w-full h-full rounded-md overflow-hidden ${
-                  showVideo ? "" : zoomLevel > 1 ? (isDragging ? "cursor-grabbing" : "cursor-grab") : "cursor-default"
+                  hasVideo ? "" : zoomLevel > 1 ? (isDragging ? "cursor-grabbing" : "cursor-grab") : "cursor-default"
                 }`}
                 onMouseDown={handleMouseDown}
                 onMouseMove={handleMouseMove}
                 onMouseUp={handleMouseUp}
                 onMouseLeave={handleMouseUp}
               >
-                {showVideo && hasVideo ? (
-                  <video src={displayArtwork.videoUrl} controls autoPlay className="w-full h-full object-contain" />
+                {hasVideo ? (
+                  displayArtwork.videoUrl?.toLowerCase().endsWith('.gif') ? (
+                    <Image
+                      src={displayArtwork.videoUrl}
+                      alt={displayArtwork.title}
+                      fill
+                      className="object-contain"
+                      unoptimized
+                      priority
+                    />
+                  ) : (
+                    <video 
+                      src={displayArtwork.videoUrl} 
+                      poster={displayArtwork.image && !displayArtwork.image.endsWith('.mp4') ? displayArtwork.image : undefined}
+                      controls 
+                      className="w-full h-full object-contain" 
+                    />
+                  )
+                ) : allImages[currentImageIndex]?.toLowerCase().endsWith('.mp4') ? (
+                  <video 
+                    src={allImages[currentImageIndex]} 
+                    controls 
+                    className="w-full h-full object-contain" 
+                  />
                 ) : (
                   <Image
                     src={allImages[currentImageIndex]}
@@ -206,7 +228,7 @@ export function ArtworkModal({ artwork, open, onOpenChange }: ArtworkModalProps)
               </div>
 
               {/* Zoom Slider Control */}
-              {!showVideo && (
+              {!hasVideo && (
                 <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 w-48 sm:w-64 bg-background/80 backdrop-blur-md px-4 py-2 rounded-full shadow-lg border border-border/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <div className="flex items-center gap-3">
                     <ZoomOut className="w-4 h-4 text-muted-foreground" />
@@ -253,20 +275,6 @@ export function ArtworkModal({ artwork, open, onOpenChange }: ArtworkModalProps)
                     {currentImageIndex + 1} / {allImages.length}
                   </div>
                 </>
-              )}
-
-              {hasVideo && !showVideo && (
-                <Button
-                  variant="secondary"
-                  size="icon"
-                  className="absolute bottom-16 sm:bottom-20 right-2 sm:right-4 z-10 rounded-full bg-background/90 backdrop-blur-sm hover:bg-background shadow-xl h-10 w-10 sm:h-12 sm:w-12"
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    setShowVideo(true)
-                  }}
-                >
-                  <Play className="w-5 h-5 sm:w-6 sm:h-6" />
-                </Button>
               )}
             </div>
 

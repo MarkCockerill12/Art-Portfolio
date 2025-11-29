@@ -40,18 +40,31 @@ export function ArtworkCard({ artwork, onClick, viewMode, priority = false }: Ar
         >
           <div className="flex flex-col sm:flex-row">
             <div className="relative w-full sm:w-48 h-48 flex-shrink-0 bg-muted">
-              <Image
-                src={artwork.image}
-                alt={artwork.title}
-                fill
-                priority={priority}
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                className={cn(
-                  "object-cover transition-all duration-500",
-                  imageLoaded ? "opacity-100 scale-100" : "opacity-0 scale-95",
-                )}
-                onLoad={() => setImageLoaded(true)}
-              />
+              {artwork.videoUrl && !artwork.customPreview ? (
+                <video
+                  src={artwork.videoUrl}
+                  className={cn(
+                    "object-cover w-full h-full transition-all duration-500",
+                    imageLoaded ? "opacity-100 scale-100" : "opacity-0 scale-95",
+                  )}
+                  muted
+                  playsInline
+                  onLoadedData={() => setImageLoaded(true)}
+                />
+              ) : (
+                <Image
+                  src={artwork.customPreview || artwork.image}
+                  alt={artwork.title}
+                  fill
+                  priority={priority}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  className={cn(
+                    "object-cover transition-all duration-500",
+                    imageLoaded ? "opacity-100 scale-100" : "opacity-0 scale-95",
+                  )}
+                  onLoad={() => setImageLoaded(true)}
+                />
+              )}
               {artwork.isFavorite && (
                 <div className="absolute top-2 right-2 bg-destructive/90 backdrop-blur-sm rounded-full p-2">
                   <Heart className="w-4 h-4 fill-destructive-foreground text-destructive-foreground" />
@@ -92,18 +105,31 @@ export function ArtworkCard({ artwork, onClick, viewMode, priority = false }: Ar
       onClick={onClick}
     >
       <div className="relative aspect-square overflow-hidden bg-muted">
-        <Image
-          src={artwork.image}
-          alt={artwork.title}
-          fill
-          priority={priority}
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          className={cn(
-            "object-cover transition-all duration-500 group-hover:scale-110",
-            imageLoaded ? "opacity-100" : "opacity-0",
-          )}
-          onLoad={() => setImageLoaded(true)}
-        />
+        {artwork.videoUrl && !artwork.customPreview ? (
+          <video
+            src={artwork.videoUrl}
+            className={cn(
+              "object-cover w-full h-full transition-all duration-500 group-hover:scale-110",
+              imageLoaded ? "opacity-100" : "opacity-0",
+            )}
+            muted
+            playsInline
+            onLoadedData={() => setImageLoaded(true)}
+          />
+        ) : (
+          <Image
+            src={artwork.customPreview || artwork.image}
+            alt={artwork.title}
+            fill
+            priority={priority}
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className={cn(
+              "object-cover transition-all duration-500 group-hover:scale-110",
+              imageLoaded ? "opacity-100" : "opacity-0",
+            )}
+            onLoad={() => setImageLoaded(true)}
+          />
+        )}
         {artwork.isFavorite && (
           <div className="absolute top-3 right-3 bg-destructive/90 backdrop-blur-sm rounded-full p-2 transition-transform group-hover:scale-110">
             <Heart className="w-4 h-4 fill-destructive-foreground text-destructive-foreground" />
