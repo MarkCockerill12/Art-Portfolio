@@ -24,14 +24,14 @@ interface FilterPanelProps {
   onFilterChange: (filters: any) => void
 }
 
-const softwareOptions: Artwork["software"][] = [
+const softwareOptions: NonNullable<Artwork["software"]>[] = [
   "Procreate",
   "Blender",
   "Krita",
   "Other",
 ]
 
-const genreOptions: Artwork["genre"][] = [
+const genreOptions: NonNullable<Artwork["genre"]>[] = [
   "Character Design",
   "Environment",
   "Concept Art",
