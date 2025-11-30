@@ -16,61 +16,47 @@ interface TimelineEvent {
 
 const timelineEvents: TimelineEvent[] = [
   {
-    year: "2024",
-    title: "Advanced Digital Art & Portfolio Launch",
+    year: "2026-Present",
+    title: "Ipad time",
     description:
-      "Launched my online portfolio to showcase my artistic journey. Started experimenting with 3D modeling in Blender and created my first mech designs. Joined online art communities and began receiving commissions.",
-    icon: "spark",
-    color: "from-purple-500 to-pink-500",
-  },
-  {
-    year: "2023",
-    title: "Computing Science & Creative Coding",
-    description:
-      "Started my Computing Science degree, combining my love for programming with creative projects. Built interactive web experiences and learned how technology can enhance artistic expression.",
-    icon: "laptop",
-    color: "from-blue-500 to-cyan-500",
-  },
-  {
-    year: "2022",
-    title: "Digital Art Evolution",
-    description:
-      "Transitioned fully to digital art using Procreate and Clip Studio Paint. Developed my signature anime-inspired style. Started creating fan art for my favorite games and shows, building a small following.",
+      "Thanks to a wonderful friend who gave me her old Ipad Pro 2017, i was able to upgrade my tools once again through the apple 1st gen pencil and procreate. This came at a perfect time as the nib in HPs pens tend to wear out very quickly, becoming unusable and costing a lot to replace consistently. Before even really using procreatem, its evident how superior the Ipad is with drawing with the lack of noticeable parralax and synergy.",
     icon: "art",
     color: "from-orange-500 to-red-500",
   },
   {
-    year: "2021",
-    title: "Discovering Digital Creation",
+    year: "2024-2025",
+    title: "From tablet to screen",
     description:
-      "Got my first drawing tablet and fell in love with digital art. Spent countless hours learning fundamentals through YouTube tutorials and online courses. Created my first character designs.",
+      "As i grew my skills, i also grew my desire to upgrade my laptop, and when i did i opted for one with a touch screen, a HP x360 pavillion. I started off with a random third party pen, but soon transitioned to a Hp MPP 2.0 Tilt pen. It took a bit of getting used to, and despite a few bugs (and it ending up less than ideal) i was able to utilise my new tech to improve my skills. I experimented with different types of media in this time, with animations both 2D and pixel.",
     icon: "art",
     color: "from-green-500 to-emerald-500",
   },
   {
-    year: "2020",
-    title: "Gaming & Anime Inspiration",
+    year: "2023-2024",
+    title: "Moving to Digital",
     description:
-      "Deepened my passion for video games and anime. Became obsessed with the art styles of games like Persona and Genshin Impact. Started sketching characters from my favorite series.",
+      "This is when i got my first drawing tablet, a Huion h640p. A simple tablet with no screen that plugged into my laptop. I started off with sketchbook, learning the basics and getting used to it more before i really started to come into my own. And when i did i moved to krita, which allowed for a lot more freedom and features.",
     icon: "game",
     color: "from-violet-500 to-purple-500",
   },
   {
-    year: "2019",
+    year: "2019-2022",
     title: "The Beginning",
     description:
-      "Picked up traditional drawing as a hobby. Started with pencil sketches and basic character studies. Discovered my love for creating original characters and telling stories through art.",
+      "This was the year i started to draw properly with pencil and paper, I had drawn a bit previously, but not regularly. I experimented with all types of styles and shading and colours. One of my first drawings was of Tails the fox, and my friend encouraged me to keep drawing and maybe one day make an art page. Of course i said no as i would never be at that level but i guess she got the last laugh.",
     icon: "art",
     color: "from-pink-500 to-rose-500",
   },
 ]
 
 const interests = [
-  { name: "Digital Art", icon: Palette, color: "bg-orange-500" },
+  { name: "2D illustration- Krita/Procreate", icon: Palette, color: "bg-orange-500" },  
+  { name: "Pixel Art- Gale", icon: Palette, color: "bg-orange-500" },  
+  { name: "Animation- Krita", icon: Laptop, color: "bg-green-500" },
   { name: "Video Games", icon: Gamepad2, color: "bg-purple-500" },
   { name: "Anime & Cartoons", icon: Tv, color: "bg-pink-500" },
-  { name: "Programming", icon: Code, color: "bg-blue-500" },
-  { name: "Tech & Gadgets", icon: Laptop, color: "bg-green-500" },
+  { name: "Movies & Tv", icon: Tv, color: "bg-pink-500" }
+
 ]
 
 function getIcon(iconType: string) {
@@ -121,16 +107,12 @@ export default function JourneyPage() {
       <main className="container mx-auto px-4 py-8">
         {/* Hero Section */}
         <div className="mb-12 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-balance">My Creative Journey</h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto text-pretty">
-            From traditional sketches to digital masterpieces, this is the story of my artistic evolution and how I
-            blend creativity with technology.
-          </p>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-balance">A lil bit about me:</h1>
         </div>
 
         {/* Interests Section */}
         <div className="mb-16">
-          <h2 className="text-2xl font-bold mb-6 text-center">What I'm Passionate About</h2>
+          <h2 className="text-2xl font-bold mb-6 text-center">What/how I like to draw:</h2>
           <div className="flex flex-wrap justify-center gap-3 max-w-3xl mx-auto">
             {interests.map((interest) => {
               const Icon = interest.icon
@@ -201,20 +183,7 @@ export default function JourneyPage() {
           </div>
         </div>
 
-        {/* About Section */}
-        <div className="mt-16 max-w-3xl mx-auto">
-          <Card className="p-8 bg-gradient-to-br from-primary/5 to-accent/5 border-2">
-            <h2 className="text-2xl font-bold mb-4 text-center">About Me</h2>
-            <p className="text-muted-foreground leading-relaxed text-center text-pretty">
-              I'm a computing science student who believes that art and technology are two sides of the same creative
-              coin. Whether I'm coding a new web app or sketching a character design, I'm driven by the desire to create
-              something meaningful and beautiful. My work is heavily influenced by the vibrant worlds of video games,
-              the emotional storytelling of anime, and the endless possibilities of digital art tools. When I'm not
-              drawing or coding, you'll find me exploring new games, watching anime, or experimenting with the latest
-              creative software.
-            </p>
-          </Card>
-        </div>
+        
       </main>
     </div>
   )

@@ -35,6 +35,7 @@ export function ArtworkModal({ artwork, open, onOpenChange }: ArtworkModalProps)
   const [showVideo, setShowVideo] = useState(false)
   const [pan, setPan] = useState({ x: 0, y: 0 })
   const [isDragging, setIsDragging] = useState(false)
+  const [isHighQualityLoaded, setIsHighQualityLoaded] = useState(false)
   
   const imageRef = useRef<HTMLDivElement>(null)
   const spotlightRef = useRef<HTMLDivElement>(null)
@@ -148,20 +149,25 @@ export function ArtworkModal({ artwork, open, onOpenChange }: ArtworkModalProps)
       setShowVideo(false)
       setPan({ x: 0, y: 0 })
     }
+    setIsHighQualityLoaded(false)
   }, [open])
+
+  useEffect(() => {
+    setIsHighQualityLoaded(false)
+  }, [currentImageIndex])
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       {displayArtwork && (
         <DialogContent
           showCloseButton={false}
-          className="w-[95vw] max-w-[95vw] sm:max-w-[95vw] md:max-w-[90vw] lg:max-w-[1600px] h-auto max-h-[90vh] lg:h-[95vh] lg:max-h-none overflow-y-auto lg:overflow-hidden !p-0 !gap-0 transition-all duration-300 block"
+          className="w-[95vw] max-w-[95vw] sm:max-w-[95vw] md:max-w-[90vw] lg:max-w-[1600px] h-auto max-h-[90vh] lg:h-[95vh] lg:max-h-none overflow-y-auto lg:overflow-hidden !p-0 !gap-0 transition-all duration-300 flex flex-col"
         >
           <DialogTitle className="sr-only">{displayArtwork.title}</DialogTitle>
           <DialogDescription className="sr-only">
             Detailed view of {displayArtwork.title} by the artist. Includes image viewer and artwork details.
           </DialogDescription>
-          <div className="flex flex-col lg:grid lg:grid-cols-[1.8fr_1fr] gap-0 relative h-auto lg:h-full overflow-visible lg:overflow-hidden">
+          <div className="flex flex-col lg:grid lg:grid-cols-[1.8fr_1fr] gap-0 relative h-auto lg:h-full overflow-visible lg:overflow-hidden flex-1 w-full">
             <div className="relative bg-black/10 dark:bg-black/30 h-auto aspect-square lg:aspect-auto lg:h-full w-full shrink-0 flex items-center justify-center p-3 sm:p-6 lg:p-10 overflow-hidden group">
               {showSpotlight && (
                 <div
@@ -211,19 +217,38 @@ export function ArtworkModal({ artwork, open, onOpenChange }: ArtworkModalProps)
                     className="w-full h-full object-contain" 
                   />
                 ) : (
-                  <Image
-                    src={allImages[currentImageIndex]}
-                    alt={`${displayArtwork.title} - Image ${currentImageIndex + 1}`}
-                    fill
-                    className={`object-contain ${isDragging ? "" : "transition-transform duration-300"}`}
-                    style={{
-                      transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoomLevel})`
-                    }}
-                    priority
-                    quality={100}
-                    sizes="(max-width: 1024px) 95vw, 60vw"
-                    draggable={false}
-                  />
+                  <>
+                    {/* Low quality placeholder (matches grid card for cache hit) */}
+                    <Image
+                      key={`placeholder-${currentImageIndex}`}
+                      src={allImages[currentImageIndex]}
+                      alt={`${displayArtwork.title} - Placeholder`}
+                      fill
+                      className={`object-contain ${isDragging ? "" : "transition-transform duration-300"}`}
+                      style={{
+                        transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoomLevel})`
+                      }}
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      priority
+                    />
+                    
+                    {/* High quality version */}
+                    <Image
+                      key={`highres-${currentImageIndex}`}
+                      src={allImages[currentImageIndex]}
+                      alt={`${displayArtwork.title} - Image ${currentImageIndex + 1}`}
+                      fill
+                      className={`object-contain ${isDragging ? "" : "transition-transform duration-300"} ${isHighQualityLoaded ? "opacity-100" : "opacity-0"}`}
+                      style={{
+                        transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoomLevel})`
+                      }}
+                      priority
+                      quality={100}
+                      sizes="(max-width: 1024px) 95vw, 60vw"
+                      draggable={false}
+                      onLoad={() => setIsHighQualityLoaded(true)}
+                    />
+                  </>
                 )}
               </div>
 
@@ -251,7 +276,7 @@ export function ArtworkModal({ artwork, open, onOpenChange }: ArtworkModalProps)
                   <Button
                     variant="secondary"
                     size="icon"
-                    className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-10 rounded-full bg-background/90 backdrop-blur-sm hover:bg-background shadow-xl h-10 w-10 sm:h-12 sm:w-12"
+                    className="!absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-10 rounded-full bg-background/90 backdrop-blur-sm hover:bg-background shadow-xl h-10 w-10 sm:h-12 sm:w-12"
                     onClick={(e) => {
                       e.stopPropagation()
                       handlePrevImage()
@@ -262,7 +287,7 @@ export function ArtworkModal({ artwork, open, onOpenChange }: ArtworkModalProps)
                   <Button
                     variant="secondary"
                     size="icon"
-                    className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-10 rounded-full bg-background/90 backdrop-blur-sm hover:bg-background shadow-xl h-10 w-10 sm:h-12 sm:w-12"
+                    className="!absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-10 rounded-full bg-background/90 backdrop-blur-sm hover:bg-background shadow-xl h-10 w-10 sm:h-12 sm:w-12"
                     onClick={(e) => {
                       e.stopPropagation()
                       handleNextImage()
@@ -280,7 +305,7 @@ export function ArtworkModal({ artwork, open, onOpenChange }: ArtworkModalProps)
 
             <div className="flex flex-col p-4 sm:p-6 lg:p-8 overflow-visible lg:overflow-y-auto flex-none lg:flex-1 lg:h-full bg-card/95 backdrop-blur-sm">
               <div className="flex-1 space-y-3 sm:space-y-4 lg:space-y-6">
-                <div className="flex items-start gap-3">
+                <div className="flex items-start gap-3 lg:pr-16">
                   {displayArtwork.isFavorite && (
                     <div className="bg-destructive/90 backdrop-blur-sm rounded-full p-2 shrink-0 mt-1">
                       <Heart className="w-4 h-4 sm:w-5 sm:h-5 fill-destructive-foreground text-destructive-foreground" />
@@ -333,19 +358,16 @@ export function ArtworkModal({ artwork, open, onOpenChange }: ArtworkModalProps)
                   className="w-full group transition-all duration-300 hover:scale-105 py-4 sm:py-5 lg:py-6 text-xs sm:text-sm lg:text-base px-3 sm:px-4"
                 >
                   <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 mr-2 shrink-0 group-hover:rotate-12 transition-transform" />
-                  <span className="truncate">Celebrate This Artwork!</span>
+                  <span className="truncate">Rahhh confetti</span>
                 </Button>
 
-                <p className="text-[10px] sm:text-xs text-muted-foreground text-center">
-                  Click to shoot confetti and spotlight!
-                </p>
               </div>
             </div>
 
             <Button
               variant="ghost"
               size="icon"
-              className="absolute top-2 sm:top-3 lg:top-4 right-2 sm:right-3 lg:right-4 z-50 rounded-full bg-background/90 backdrop-blur-sm hover:bg-background shadow-xl h-10 w-10 sm:h-11 sm:w-11"
+              className="!absolute top-2 sm:top-3 lg:top-4 right-2 sm:right-3 lg:right-4 z-50 rounded-full bg-background/90 backdrop-blur-sm hover:bg-background shadow-xl h-10 w-10 sm:h-11 sm:w-11"
               onClick={() => onOpenChange(false)}
             >
               <X className="w-5 h-5 sm:w-6 sm:h-6" />

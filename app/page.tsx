@@ -10,6 +10,8 @@ import { SortDropdown, type SortOption } from "@/components/sort-dropdown"
 import { myArtwork, secretArtwork } from "@/lib/my-artwork"
 import type { ViewMode, Artwork } from "@/lib/types"
 import { useKonami } from "@/lib/konami-context"
+import { cn } from "@/lib/utils"
+import { Badge } from "@/components/ui/badge"
 
 export default function GalleryPage() {
   const [viewMode, setViewMode] = useState<ViewMode>("grid")
@@ -74,7 +76,7 @@ export default function GalleryPage() {
       <main className="container mx-auto px-4 py-8">
         {/* Header Section */}
         <div className="mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold mb-3 text-balance">look some art stuff</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-3 text-balance">Look, some art stuff</h1>
 
         </div>
 
@@ -105,7 +107,7 @@ export default function GalleryPage() {
             <p className="text-muted-foreground">Try adjusting your filters to see more results</p>
           </div>
         ) : viewMode === "grid" ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredAndSortedArtwork.map((item, index) => (
               <ArtworkCard
                 key={item.id}
@@ -117,16 +119,46 @@ export default function GalleryPage() {
             ))}
           </div>
         ) : (
-          <div className="max-w-4xl mx-auto space-y-8">
-            {filteredAndSortedArtwork.map((item, index) => (
-              <ArtworkCard
-                key={item.id}
-                artwork={item}
-                viewMode="timeline"
-                onClick={() => setSelectedArtwork(item)}
-                priority={index < 2}
-              />
-            ))}
+          <div className="relative max-w-6xl mx-auto p-4">
+            {/* Central Line */}
+            <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-border -translate-x-1/2 md:translate-x-0" />
+
+            <div className="space-y-12">
+              {filteredAndSortedArtwork.map((artwork, index) => {
+                const isEven = index % 2 === 0
+                return (
+                  <div
+                    key={artwork.id}
+                    className={cn(
+                      "relative flex items-center justify-between md:justify-center gap-8",
+                      isEven ? "md:flex-row" : "md:flex-row-reverse",
+                    )}
+                  >
+                    {/* Date Badge (Center) */}
+                    <div className="absolute left-4 md:left-1/2 -translate-x-1/2 z-10 flex flex-col items-center">
+                      <Badge variant="outline" className="bg-background shadow-sm border-primary/50 whitespace-nowrap">
+                        {new Date(artwork.date).toLocaleDateString("en-US", { month: "short", year: "numeric" })}
+                      </Badge>
+                      {/* Dot */}
+                      <div className="w-3 h-3 rounded-full bg-primary mt-1 ring-4 ring-background" />
+                    </div>
+
+                    {/* Card Side */}
+                    <div className="w-full md:w-[calc(50%-3rem)] pl-12 md:pl-0">
+                      <ArtworkCard
+                        artwork={artwork}
+                        viewMode="grid"
+                        onClick={() => setSelectedArtwork(artwork)}
+                        priority={index < 4}
+                      />
+                    </div>
+
+                    {/* Spacer Side (Desktop only) */}
+                    <div className="hidden md:block w-[calc(50%-3rem)]" />
+                  </div>
+                )
+              })}
+            </div>
           </div>
         )}
       </main>

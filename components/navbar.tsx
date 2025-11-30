@@ -66,7 +66,7 @@ export function Navbar() {
             className="transition-all duration-300 hover:scale-105 bg-transparent"
           >
             <a
-              href="https://instagram.com/yourusername"
+              href="https://instagram.com/hypernova_art823"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Instagram"

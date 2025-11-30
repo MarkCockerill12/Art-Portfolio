@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   // <CHANGE> Updated metadata for art portfolio
   title: "Art Portfolio | Creative Journey",
   description:
-    "A vibrant showcase of my artistic journey, featuring digital art, character designs, and creative experiments. Computing science student with a passion for games, anime, and visual storytelling.",
+    "Yeah its my art portfolio lol.",
   generator: "v0.app",
 }
 

@@ -22,7 +22,7 @@ export function ArtworkCard({ artwork, onClick, viewMode, priority = false }: Ar
     return (
       <div className="flex flex-col md:flex-row gap-4 md:gap-6 group">
         <div className="flex flex-col items-center md:items-end min-w-[140px]">
-          <Badge variant="outline" className="mb-2 text-xs">
+          <Badge variant="outline" className="mb-2 text-xs bg-background/80 backdrop-blur-sm border-primary/20">
             {new Date(artwork.date).toLocaleDateString("en-US", {
               year: "numeric",
               month: "short",
@@ -38,8 +38,8 @@ export function ArtworkCard({ artwork, onClick, viewMode, priority = false }: Ar
           className="flex-1 overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-lg hover:scale-[1.02] border-2"
           onClick={onClick}
         >
-          <div className="flex flex-col sm:flex-row">
-            <div className="relative w-full sm:w-48 h-48 flex-shrink-0 bg-muted">
+          <div className="flex flex-col md:flex-row">
+            <div className="relative w-full md:w-72 h-100 md:h-auto flex-shrink-0 bg-muted">
               {artwork.videoUrl && !artwork.customPreview ? (
                 <video
                   src={artwork.videoUrl}

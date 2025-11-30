@@ -88,15 +88,15 @@
 /* Windows XP Theme - blocky, nostalgic design with background */
 .theme-windowsxp {
   --background: oklch(0.55 0.08 240);
-  --foreground: oklch(1 0 0);
+  --foreground: oklch(0% 0 0);
   --card: oklch(0.92 0.02 240);
   --card-foreground: oklch(0.2 0 0);
   --popover: oklch(0.95 0 0);
   --popover-foreground: oklch(0.2 0 0);
   --primary: oklch(0.45 0.15 240);
-  --primary-foreground: oklch(1 0 0);
+  --primary-foreground: oklch(0 0 0);
   --secondary: oklch(0.65 0.1 120);
-  --secondary-foreground: oklch(1 0 0);
+  --secondary-foreground: oklch(0 0 0);
   --muted: oklch(0.85 0.02 240);
   --muted-foreground: oklch(0.4 0 0);
   --accent: oklch(0.7 0.15 80);
@@ -490,6 +490,7 @@
 
 .theme-macos button {
   background: rgba(255, 255, 255, 0.75) !important;
+  color: oklch(0.2 0 0) !important;
   transition: all 0.2s ease;
 }
 
@@ -533,6 +534,24 @@
   border-radius: 0 !important;
 }
 
+.theme-gameboy h1,
+.theme-gameboy h2,
+.theme-gameboy h3,
+.theme-gameboy p,
+.theme-gameboy span,
+.theme-gameboy div {
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.theme-gameboy h1,
+.theme-gameboy h2 {
+  background: rgba(255, 255, 255, 0.6);
+  display: inline-block;
+  padding: 0.2em 0.5em;
+  border: 2px solid oklch(0.2 0.05 120);
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.1);
+}
+
 .theme-gameboy nav,
 .theme-gameboy .card,
 .theme-gameboy button {
@@ -543,6 +562,7 @@
 
 .theme-gameboy button {
   background: oklch(0.7 0.08 120) !important;
+  color: oklch(0.2 0.05 120) !important;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
