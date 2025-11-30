@@ -12,7 +12,7 @@ const _geistMono = Geist_Mono({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   // <CHANGE> Updated metadata for art portfolio
-  title: "Art Portfolio | Creative Journey",
+  title: "Art Portfolio",
   description:
     "Yeah its my art portfolio lol.",
   generator: "v0.app",
