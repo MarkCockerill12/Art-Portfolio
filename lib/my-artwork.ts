@@ -1,10 +1,14 @@
 import type { Artwork } from "./types"
 
+// Base URL for Cloudflare R2 bucket
+const R2_BASE_URL = "https://pub-699441ce0cfb40449cc458823a3f1ed2.r2.dev/art-portfolio/art"
+
 export const myArtwork: Artwork[] = [
   {
     id: "83",
     title: "Quick Sketch- Tails",
-    image: "/art/tails.png",
+    image: `${R2_BASE_URL}/full-size/tails.webp`,
+    thumbnail: `${R2_BASE_URL}/thumbnails/tails_thumb.webp`,
     description: "Sketch of tails from the sonic series.",
     date: "19 November 2025",
     software: "Krita",
@@ -15,10 +19,10 @@ export const myArtwork: Artwork[] = [
   {
     id: "82",
     title: "Yareli",
-    image: "/art/yareli/yareli line.png",
+    image: `${R2_BASE_URL}/full-size/yareli/yareli line.webp`,
+    thumbnail: `${R2_BASE_URL}/thumbnails/yareli/yareli line_thumb.webp`,
     images: [
-      "/art/yareli/yareli line.png",
-      "/art/yareli/yareli no line.png",
+      `${R2_BASE_URL}/full-size/yareli/yareli no line.webp`,
     ],
     description: "A drawing of the character Yareli from Warframe.",
     date: "22 September 2025",
@@ -31,7 +35,8 @@ export const myArtwork: Artwork[] = [
   {
     id: "81",
     title: "Quick Sketch- Ai Ohto",
-    image: "/art/ai ohto.png",
+    image: `${R2_BASE_URL}/full-size/ai ohto.webp`,
+    thumbnail: `${R2_BASE_URL}/thumbnails/ai ohto_thumb.webp`,
     description: "A drawing of Ai Ohto from wonder egg priority, not heavily rendered, just wanted to draw her for fun.",
     date: "19 June 2025",
     software: "Krita",
@@ -43,7 +48,8 @@ export const myArtwork: Artwork[] = [
   {
     id: "80",
     title: "Quick Sketch- Chao",
-    image: "/art/Chao.png",
+    image: `${R2_BASE_URL}/full-size/Chao.webp`,
+    thumbnail: `${R2_BASE_URL}/thumbnails/Chao_thumb.webp`,
     description: "A cute lil Chao from the sonic series.",
     date: "23 May 2025",
     software: "Krita",
@@ -55,9 +61,9 @@ export const myArtwork: Artwork[] = [
   {
     id: "79",
     title: "Hero Chao Sprite Gif",
-    image: "/art/Hero chaoPreview.png",
-    customPreview: "/art/Hero chaoPreview.png",
-    videoUrl: "/art/Hero chao.gif",
+    image: `${R2_BASE_URL}/full-size/Hero chaoPreview.webp`,
+    thumbnail: `${R2_BASE_URL}/thumbnails/Hero chaoPreview_thumb.webp`,
+    videoUrl: `${R2_BASE_URL}/full-size/Hero chao.mp4`,
     description: "I made this lil hero chao float around as a GIF.",
     date: "14 June 2025",
     software: "Gale",
@@ -68,7 +74,8 @@ export const myArtwork: Artwork[] = [
   {
     id: "78",
     title: "Pixel Chao Sprites",
-    image: "/art/Chao Sprite1.png",
+    image: `${R2_BASE_URL}/full-size/Chao Sprite1.webp`,
+    thumbnail: `${R2_BASE_URL}/thumbnails/Chao Sprite1_thumb.webp`,
     description: "Some normal and hero chao pixel sprites.",
     date: "14 June 2025",
     software: "Gale",
@@ -79,7 +86,8 @@ export const myArtwork: Artwork[] = [
   {
     id: "77",
     title: "Gura",
-    image: "/art/Gura.png",
+    image: `${R2_BASE_URL}/full-size/Gura.webp`,
+    thumbnail: `${R2_BASE_URL}/thumbnails/Gura_thumb.webp`,
     description: "I dont watch Vtubers, but i saw a cool drawing of this one and wanted to recreate it.",
     date: "05 May 2025",
     software: "Krita",
@@ -91,10 +99,10 @@ export const myArtwork: Artwork[] = [
   {
     id: "76",
     title: "Empty",
-    image: "/art/empty/empty v2.png",
+    image: `${R2_BASE_URL}/full-size/empty/empty v2.webp`,
+    thumbnail: `${R2_BASE_URL}/thumbnails/empty/empty v2_thumb.webp`,
     images: [
-      "/art/empty/empty v2.png",
-      "/art/empty/empty.png",
+      `${R2_BASE_URL}/full-size/empty/empty.webp`,
     ],
     description: "An emotional drawing. Final version vs first draft.",
     date: "13 April 2025",
@@ -107,7 +115,8 @@ export const myArtwork: Artwork[] = [
   {
     id: "75",
     title: "Quick Sketch- Hollow Knight and Hornet",
-    image: "/art/hollow.png",
+    image: `${R2_BASE_URL}/full-size/hollow.webp`,
+    thumbnail: `${R2_BASE_URL}/thumbnails/hollow_thumb.webp`,
     description: "I had just beaten hollow knight and wanted to them. Just a quick sketch with a simple background.",
     date: "13 April 2025",
     software: "Krita",
@@ -119,7 +128,8 @@ export const myArtwork: Artwork[] = [
   {
     id: "74",
     title: "Quick Sketch- Neon City",
-    image: "/art/neon city.png",
+    image: `${R2_BASE_URL}/full-size/neon city.webp`,
+    thumbnail: `${R2_BASE_URL}/thumbnails/neon city_thumb.webp`,
     description: "A purple neon city with some fog.",
     date: "22 March 2025",
     software: "Krita",
@@ -131,9 +141,9 @@ export const myArtwork: Artwork[] = [
   {
     id: "73",
     title: "One punch man animation",
-    image: "/art/opmanim1Preview.png",
-    customPreview: "/art/opmanim1Preview.png",
-    videoUrl: "/art/opmanim1.mp4",
+    image: `${R2_BASE_URL}/full-size/opmanim1Preview.webp`,
+    thumbnail: `${R2_BASE_URL}/thumbnails/opmanim1Preview_thumb.webp`,
+    videoUrl: `${R2_BASE_URL}/full-size/opmanim1.mp4`,
     description: "An animation with saitama vs a random guy or demon.",
     date: "09 March 2024",
     software: "Krita",
@@ -144,7 +154,8 @@ export const myArtwork: Artwork[] = [
   {
     id: "72",
     title: "Innocence Forged in Fire",
-    image: "/art/Innocence forged in fire.png",
+    image: `${R2_BASE_URL}/full-size/Innocence forged in fire.webp`,
+    thumbnail: `${R2_BASE_URL}/thumbnails/Innocence forged in fire_thumb.webp`,
     description: "My first completely original drawing with no 1 for 1 references. The simple story behind this follows that of a fiery demon who crawled out of hell, and he encounters a little cat. Yet curiously he doesn't attack or scare it away, but goes down to pet it.",
     date: "24 November 2024",
     software: "Krita",
@@ -156,7 +167,8 @@ export const myArtwork: Artwork[] = [
   {
     id: "71",
     title: "Crucible Knight Starscape",
-    image: "/art/crucible stars.png",
+    image: `${R2_BASE_URL}/full-size/crucible stars.webp`,
+    thumbnail: `${R2_BASE_URL}/thumbnails/crucible stars_thumb.webp`,
     description: "This is based off a scene from elden ring, where an esteemed and estranged \"Crucible Knight\" stares off into the underground expanse filled with shiny rocks that mimics nebula.",
     date: "24 September 2024",
     software: "Krita",
@@ -168,7 +180,8 @@ export const myArtwork: Artwork[] = [
   {
     id: "70",
     title: "The Lich- Furnace Pose",
-    image: "/art/lich.png",
+    image: `${R2_BASE_URL}/full-size/lich.webp`,
+    thumbnail: `${R2_BASE_URL}/thumbnails/lich_thumb.webp`,
     description: "A drawing of the Lich from adventure time, pose inspired by sukuna from Jujutsu Kaisen.",
     date: "04 September 2024",
     software: "Krita",
@@ -180,7 +193,8 @@ export const myArtwork: Artwork[] = [
   {
     id: "69",
     title: "Raiden and 2b",
-    image: "/art/raiden2b.png",
+    image: `${R2_BASE_URL}/full-size/raiden2b.webp`,
+    thumbnail: `${R2_BASE_URL}/thumbnails/raiden2b_thumb.webp`,
     description: "Crossover fan art featuring Raiden from Metal Gear Revengance and 2b from Neir Autonoma.",
     date: "16 May 2024",
     software: "Krita",
@@ -192,7 +206,8 @@ export const myArtwork: Artwork[] = [
   {
     id: "68",
     title: "Random Girl 1",
-    image: "/art/uhh.jpg",
+    image: `${R2_BASE_URL}/full-size/uhh.webp`,
+    thumbnail: `${R2_BASE_URL}/thumbnails/uhh_thumb.webp`,
     description: "Idk.",
     date: "14 April 2024",
     software: "Krita",
@@ -204,9 +219,9 @@ export const myArtwork: Artwork[] = [
   {
     id: "67",
     title: "Undertale Chair Spin Animation",
-    image: "/art/undertalechairspinPreview.png",
-    customPreview: "/art/undertalechairspinPreview.png",
-    videoUrl: "/art/undertalechairspin.mp4",
+    image: `${R2_BASE_URL}/full-size/undertalechairspinPreview.webp`,
+    thumbnail: `${R2_BASE_URL}/thumbnails/undertalechairspinPreview_thumb.webp`,
+    videoUrl: `${R2_BASE_URL}/full-size/undertalechairspin.mp4`,
     description: "Hahahaa",
     date: "11 April 2024",
     software: "Krita",
@@ -217,7 +232,8 @@ export const myArtwork: Artwork[] = [
   {
     id: "66",
     title: "Sonic vs Metal Sonic",
-    image: "/art/sonic.png",
+    image: `${R2_BASE_URL}/full-size/sonic.webp`,
+    thumbnail: `${R2_BASE_URL}/thumbnails/sonic_thumb.webp`,
     description: "My first drawing after switching from Sketchbook to Krita, oh yeah it was a good idea to move.",
     date: "17 December 2023",
     software: "Krita",
@@ -228,7 +244,8 @@ export const myArtwork: Artwork[] = [
   {
     id: "65",
     title: "Sonic",
-    image: "/art/drawing17.tif",
+    image: `${R2_BASE_URL}/full-size/drawing17.webp`, 
+    thumbnail: `${R2_BASE_URL}/thumbnails/drawing17_thumb.webp`,
     description: "My last completed drawing on sketchbook",
     date: "30 July 2023",
     software: "Sketchbook",
@@ -239,7 +256,8 @@ export const myArtwork: Artwork[] = [
   {
     id: "64",
     title: "Quick Sketch- Neon Nezuko",
-    image: "/art/drawing16.tif",
+    image: `${R2_BASE_URL}/full-size/drawing16.webp`, 
+    thumbnail: `${R2_BASE_URL}/thumbnails/drawing16_thumb.webp`,
     description: "Another quick neon test with a demon slayer character.",
     date: "28 July 2023",
     software: "Sketchbook",
@@ -250,7 +268,8 @@ export const myArtwork: Artwork[] = [
   {
     id: "63",
     title: "Neon Deku- Power pose",
-    image: "/art/drawing15.tif",
+    image: `${R2_BASE_URL}/full-size/drawing15.webp`, 
+    thumbnail: `${R2_BASE_URL}/thumbnails/drawing15_thumb.webp`,
     description: "This is where i started to experiment with neon effects in characters, clearly i have a long way to go. This was insired by Izuku from My Hero Academia",
     date: "26 May 2023",
     software: "Sketchbook",
@@ -261,7 +280,8 @@ export const myArtwork: Artwork[] = [
   {
     id: "62",
     title: "Rengoku",
-    image: "/art/drawing14.tif",
+    image: `${R2_BASE_URL}/full-size/drawing14.webp`, 
+    thumbnail: `${R2_BASE_URL}/thumbnails/drawing14_thumb.webp`,
     description: "This digital art was a redrawing of one i had done with pencil and paper before, testing how different media differently convey my drawings.",
     date: "04 May 2023",
     software: "Sketchbook",
@@ -272,7 +292,8 @@ export const myArtwork: Artwork[] = [
   {
     id: "61",
     title: "Shinobu in a Wysteria flower garden",
-    image: "/art/drawing13.tif",
+    image: `${R2_BASE_URL}/full-size/drawing13.webp`, 
+    thumbnail: `${R2_BASE_URL}/thumbnails/drawing13_thumb.webp`,
     description: "I wanted to draw something from demon slayer, so i drew shinobu.",
     date: "25 April 2023",
     software: "Sketchbook",
@@ -283,7 +304,8 @@ export const myArtwork: Artwork[] = [
   {
     id: "60",
     title: "Romani/Malon riding a horse",
-    image: "/art/drawing12.tif",
+    image: `${R2_BASE_URL}/full-size/drawing12.webp`, 
+    thumbnail: `${R2_BASE_URL}/thumbnails/drawing12_thumb.webp`,
     description: "I just wanted to draw something legend of zelda related after beating Ocarina of Time and Majoras Mask half a year prior. I have no clue if this is romani or malon as they are look the same and are basically counterparts paralleling between the games.",
     date: "06 April 2023",
     software: "Sketchbook",
@@ -294,7 +316,8 @@ export const myArtwork: Artwork[] = [
   {
     id: "59",
     title: "Random girl 3",
-    image: "/art/drawing11.tif",
+    image: `${R2_BASE_URL}/full-size/drawing11.webp`, 
+    thumbnail: `${R2_BASE_URL}/thumbnails/drawing11_thumb.webp`,
     description: "This drawing (yes i know the face is wonky) was inspired by an image that would show on a manga website when a chapter hadn't released yet. I had more time and boredom back then.",
     date: "18 March 2023",
     software: "Sketchbook",
@@ -305,7 +328,8 @@ export const myArtwork: Artwork[] = [
   {
     id: "58",
     title: "Sans and Frisk in Judgement Hall",
-    image: "/art/drawing9.tif",
+    image: `${R2_BASE_URL}/full-size/drawing9.webp`, 
+    thumbnail: `${R2_BASE_URL}/thumbnails/drawing9_thumb.webp`,
     description: "This cute little piece was one i took reference from TC-96s drawing, an artist whos undertale comics i heavily followed in my childhood. It depicts sans and frisk sharing a nice nap in the judgement hall, this is sure to spark emotions in anyone who knows how the situation could turn out differently under worse conditions.",
     date: "13 March 2023",
     software: "Sketchbook",
@@ -316,7 +340,8 @@ export const myArtwork: Artwork[] = [
   {
     id: "57",
     title: "Sans attacking",
-    image: "/art/drawing10.tif",
+    image: `${R2_BASE_URL}/full-size/drawing10.webp`, 
+    thumbnail: `${R2_BASE_URL}/thumbnails/drawing10_thumb.webp`,
     description: "A powerful magic attack casted by sans as a last resort.",
     date: "12 March 2023",
     software: "Sketchbook",
@@ -327,7 +352,8 @@ export const myArtwork: Artwork[] = [
   {
     id: "56",
     title: "Deku- Menacing",
-    image: "/art/drawing8.tif",
+    image: `${R2_BASE_URL}/full-size/drawing8.webp`, 
+    thumbnail: `${R2_BASE_URL}/thumbnails/drawing8_thumb.webp`,
     description: "Okay yeah the stars alligned with this one, the use of simple shapes and lighting boosted this piece well beyond my skill level at the time, as seen comparing this to my other works. This picture of Deku/Izuku Midoriya was inspired by a tournament fight.",
     date: "10 February 2023",
     software: "Sketchbook",
@@ -338,7 +364,8 @@ export const myArtwork: Artwork[] = [
   {
     id: "55",
     title: "Random Girl 2",
-    image: "/art/drawing7.tif",
+    image: `${R2_BASE_URL}/full-size/drawing7.webp`, 
+    thumbnail: `${R2_BASE_URL}/thumbnails/drawing7_thumb.webp`,
     description: "A return to colouring after practicing just line art.",
     date: "08 February 2023",
     software: "Sketchbook",
@@ -349,7 +376,8 @@ export const myArtwork: Artwork[] = [
   {
     id: "54",
     title: "Megumin",
-    image: "/art/drawing6.tif",
+    image: `${R2_BASE_URL}/full-size/drawing6.webp`, 
+    thumbnail: `${R2_BASE_URL}/thumbnails/drawing6_thumb.webp`,
     description: "Megumin from Konosuba.",
     date: "14 January 2023",
     software: "Sketchbook",
@@ -360,7 +388,8 @@ export const myArtwork: Artwork[] = [
   {
     id: "53",
     title: "Irina Jelavić",
-    image: "/art/drawing5.tif",
+    image: `${R2_BASE_URL}/full-size/drawing5.webp`, 
+    thumbnail: `${R2_BASE_URL}/thumbnails/drawing5_thumb.webp`,
     description: "Irina Jelavić from Classroom Assasination.",
     date: "02 January 2023",
     software: "Sketchbook",
@@ -371,7 +400,8 @@ export const myArtwork: Artwork[] = [
   {
     id: "52",
     title: "Ai Ohto- Surprised",
-    image: "/art/drawing4.tif",
+    image: `${R2_BASE_URL}/full-size/drawing4.webp`, 
+    thumbnail: `${R2_BASE_URL}/thumbnails/drawing4_thumb.webp`,
     description: "Ai Ohto from Wonder Egg Priority, but surpsied.. i think.",
     date: "01 January 2023",
     software: "Sketchbook",
@@ -382,7 +412,8 @@ export const myArtwork: Artwork[] = [
   {
     id: "51",
     title: "Ai Ohto- Rahh angry",
-    image: "/art/drawing3.tif",
+    image: `${R2_BASE_URL}/full-size/drawing3.webp`, 
+    thumbnail: `${R2_BASE_URL}/thumbnails/drawing3_thumb.webp`,
     description: "Ai Ohto from Wonder Egg Priority, but angry.",
     date: "31 December 2022",
     software: "Sketchbook",
@@ -393,7 +424,8 @@ export const myArtwork: Artwork[] = [
   {
     id: "50",
     title: "Ochako Uraraka",
-    image: "/art/drawing2.tif",
+    image: `${R2_BASE_URL}/full-size/drawing2.webp`, 
+    thumbnail: `${R2_BASE_URL}/thumbnails/drawing2_thumb.webp`,
     description: "Ochako from My Hero Academia.",
     date: "30 December 2022",
     software: "Sketchbook",
@@ -404,7 +436,8 @@ export const myArtwork: Artwork[] = [
   {
     id: "49",
     title: "First Digital Drawing- Master Chief's Helmet",
-    image: "/art/drawing.tif",
+    image: `${R2_BASE_URL}/full-size/drawing.webp`, 
+    thumbnail: `${R2_BASE_URL}/thumbnails/drawing_thumb.webp`,
     description: "My first ever digital drawing, Master chiefs helmet.",
     date: "27 December 2022",
     software: "Sketchbook",
@@ -413,33 +446,12 @@ export const myArtwork: Artwork[] = [
     isFavorite: false,
   },
   
-  // Placeholders 50-1
-  // {
-  //   id: "50",
-  //   title: "Placeholder 50",
-  //   image: "/art/placeholder.png",
-  //   description: "Placeholder description",
-  //   date: "01 January 2000",
-  //   software: "Other",
-  //   genre: "Sketch",
-  //   isDigital: false,
-  //   isFavorite: false,
-  // },
-  // {
-  //   id: "49",
-  //   title: "Placeholder 49",
-  //   image: "/art/placeholder.png",
-  //   description: "Placeholder description",
-  //   date: "01 January 2000",
-  //   software: "Other",
-  //   genre: "Sketch",
-  //   isDigital: false,
-  //   isFavorite: false,
-  // },
+  // // Placeholders 48-1 (Kept for layout/testing)
   // {
   //   id: "48",
   //   title: "Placeholder 48",
-  //   image: "/art/placeholder.png",
+  //   image: `${R2_BASE_URL}/full-size/placeholder.webp`,
+  //   thumbnail: `${R2_BASE_URL}/thumbnails/placeholder_thumb.webp`,
   //   description: "Placeholder description",
   //   date: "01 January 2000",
   //   software: "Other",
@@ -450,7 +462,8 @@ export const myArtwork: Artwork[] = [
   // {
   //   id: "47",
   //   title: "Placeholder 47",
-  //   image: "/art/placeholder.png",
+  //   image: `${R2_BASE_URL}/full-size/placeholder.webp`,
+  //   thumbnail: `${R2_BASE_URL}/thumbnails/placeholder_thumb.webp`,
   //   description: "Placeholder description",
   //   date: "01 January 2000",
   //   software: "Other",
@@ -461,7 +474,8 @@ export const myArtwork: Artwork[] = [
   // {
   //   id: "46",
   //   title: "Placeholder 46",
-  //   image: "/art/placeholder.png",
+  //   image: `${R2_BASE_URL}/full-size/placeholder.webp`,
+  //   thumbnail: `${R2_BASE_URL}/thumbnails/placeholder_thumb.webp`,
   //   description: "Placeholder description",
   //   date: "01 January 2000",
   //   software: "Other",
@@ -472,7 +486,8 @@ export const myArtwork: Artwork[] = [
   // {
   //   id: "45",
   //   title: "Placeholder 45",
-  //   image: "/art/placeholder.png",
+  //   image: `${R2_BASE_URL}/full-size/placeholder.webp`,
+  //   thumbnail: `${R2_BASE_URL}/thumbnails/placeholder_thumb.webp`,
   //   description: "Placeholder description",
   //   date: "01 January 2000",
   //   software: "Other",
@@ -483,7 +498,8 @@ export const myArtwork: Artwork[] = [
   // {
   //   id: "44",
   //   title: "Placeholder 44",
-  //   image: "/art/placeholder.png",
+  //   image: `${R2_BASE_URL}/full-size/placeholder.webp`,
+  //   thumbnail: `${R2_BASE_URL}/thumbnails/placeholder_thumb.webp`,
   //   description: "Placeholder description",
   //   date: "01 January 2000",
   //   software: "Other",
@@ -494,7 +510,8 @@ export const myArtwork: Artwork[] = [
   // {
   //   id: "43",
   //   title: "Placeholder 43",
-  //   image: "/art/placeholder.png",
+  //   image: `${R2_BASE_URL}/full-size/placeholder.webp`,
+  //   thumbnail: `${R2_BASE_URL}/thumbnails/placeholder_thumb.webp`,
   //   description: "Placeholder description",
   //   date: "01 January 2000",
   //   software: "Other",
@@ -505,7 +522,8 @@ export const myArtwork: Artwork[] = [
   // {
   //   id: "42",
   //   title: "Placeholder 42",
-  //   image: "/art/placeholder.png",
+  //   image: `${R2_BASE_URL}/full-size/placeholder.webp`,
+  //   thumbnail: `${R2_BASE_URL}/thumbnails/placeholder_thumb.webp`,
   //   description: "Placeholder description",
   //   date: "01 January 2000",
   //   software: "Other",
@@ -516,7 +534,8 @@ export const myArtwork: Artwork[] = [
   // {
   //   id: "41",
   //   title: "Placeholder 41",
-  //   image: "/art/placeholder.png",
+  //   image: `${R2_BASE_URL}/full-size/placeholder.webp`,
+  //   thumbnail: `${R2_BASE_URL}/thumbnails/placeholder_thumb.webp`,
   //   description: "Placeholder description",
   //   date: "01 January 2000",
   //   software: "Other",
@@ -527,7 +546,8 @@ export const myArtwork: Artwork[] = [
   // {
   //   id: "40",
   //   title: "Placeholder 40",
-  //   image: "/art/placeholder.png",
+  //   image: `${R2_BASE_URL}/full-size/placeholder.webp`,
+  //   thumbnail: `${R2_BASE_URL}/thumbnails/placeholder_thumb.webp`,
   //   description: "Placeholder description",
   //   date: "01 January 2000",
   //   software: "Other",
@@ -538,7 +558,8 @@ export const myArtwork: Artwork[] = [
   // {
   //   id: "39",
   //   title: "Placeholder 39",
-  //   image: "/art/placeholder.png",
+  //   image: `${R2_BASE_URL}/full-size/placeholder.webp`,
+  //   thumbnail: `${R2_BASE_URL}/thumbnails/placeholder_thumb.webp`,
   //   description: "Placeholder description",
   //   date: "01 January 2000",
   //   software: "Other",
@@ -549,7 +570,8 @@ export const myArtwork: Artwork[] = [
   // {
   //   id: "38",
   //   title: "Placeholder 38",
-  //   image: "/art/placeholder.png",
+  //   image: `${R2_BASE_URL}/full-size/placeholder.webp`,
+  //   thumbnail: `${R2_BASE_URL}/thumbnails/placeholder_thumb.webp`,
   //   description: "Placeholder description",
   //   date: "01 January 2000",
   //   software: "Other",
@@ -560,7 +582,8 @@ export const myArtwork: Artwork[] = [
   // {
   //   id: "37",
   //   title: "Placeholder 37",
-  //   image: "/art/placeholder.png",
+  //   image: `${R2_BASE_URL}/full-size/placeholder.webp`,
+  //   thumbnail: `${R2_BASE_URL}/thumbnails/placeholder_thumb.webp`,
   //   description: "Placeholder description",
   //   date: "01 January 2000",
   //   software: "Other",
@@ -571,7 +594,8 @@ export const myArtwork: Artwork[] = [
   // {
   //   id: "36",
   //   title: "Placeholder 36",
-  //   image: "/art/placeholder.png",
+  //   image: `${R2_BASE_URL}/full-size/placeholder.webp`,
+  //   thumbnail: `${R2_BASE_URL}/thumbnails/placeholder_thumb.webp`,
   //   description: "Placeholder description",
   //   date: "01 January 2000",
   //   software: "Other",
@@ -582,7 +606,8 @@ export const myArtwork: Artwork[] = [
   // {
   //   id: "35",
   //   title: "Placeholder 35",
-  //   image: "/art/placeholder.png",
+  //   image: `${R2_BASE_URL}/full-size/placeholder.webp`,
+  //   thumbnail: `${R2_BASE_URL}/thumbnails/placeholder_thumb.webp`,
   //   description: "Placeholder description",
   //   date: "01 January 2000",
   //   software: "Other",
@@ -593,7 +618,8 @@ export const myArtwork: Artwork[] = [
   // {
   //   id: "34",
   //   title: "Placeholder 34",
-  //   image: "/art/placeholder.png",
+  //   image: `${R2_BASE_URL}/full-size/placeholder.webp`,
+  //   thumbnail: `${R2_BASE_URL}/thumbnails/placeholder_thumb.webp`,
   //   description: "Placeholder description",
   //   date: "01 January 2000",
   //   software: "Other",
@@ -604,7 +630,8 @@ export const myArtwork: Artwork[] = [
   // {
   //   id: "33",
   //   title: "Placeholder 33",
-  //   image: "/art/placeholder.png",
+  //   image: `${R2_BASE_URL}/full-size/placeholder.webp`,
+  //   thumbnail: `${R2_BASE_URL}/thumbnails/placeholder_thumb.webp`,
   //   description: "Placeholder description",
   //   date: "01 January 2000",
   //   software: "Other",
@@ -615,7 +642,8 @@ export const myArtwork: Artwork[] = [
   // {
   //   id: "32",
   //   title: "Placeholder 32",
-  //   image: "/art/placeholder.png",
+  //   image: `${R2_BASE_URL}/full-size/placeholder.webp`,
+  //   thumbnail: `${R2_BASE_URL}/thumbnails/placeholder_thumb.webp`,
   //   description: "Placeholder description",
   //   date: "01 January 2000",
   //   software: "Other",
@@ -626,7 +654,8 @@ export const myArtwork: Artwork[] = [
   // {
   //   id: "31",
   //   title: "Placeholder 31",
-  //   image: "/art/placeholder.png",
+  //   image: `${R2_BASE_URL}/full-size/placeholder.webp`,
+  //   thumbnail: `${R2_BASE_URL}/thumbnails/placeholder_thumb.webp`,
   //   description: "Placeholder description",
   //   date: "01 January 2000",
   //   software: "Other",
@@ -637,7 +666,8 @@ export const myArtwork: Artwork[] = [
   // {
   //   id: "30",
   //   title: "Placeholder 30",
-  //   image: "/art/placeholder.png",
+  //   image: `${R2_BASE_URL}/full-size/placeholder.webp`,
+  //   thumbnail: `${R2_BASE_URL}/thumbnails/placeholder_thumb.webp`,
   //   description: "Placeholder description",
   //   date: "01 January 2000",
   //   software: "Other",
@@ -648,7 +678,8 @@ export const myArtwork: Artwork[] = [
   // {
   //   id: "29",
   //   title: "Placeholder 29",
-  //   image: "/art/placeholder.png",
+  //   image: `${R2_BASE_URL}/full-size/placeholder.webp`,
+  //   thumbnail: `${R2_BASE_URL}/thumbnails/placeholder_thumb.webp`,
   //   description: "Placeholder description",
   //   date: "01 January 2000",
   //   software: "Other",
@@ -659,7 +690,8 @@ export const myArtwork: Artwork[] = [
   // {
   //   id: "28",
   //   title: "Placeholder 28",
-  //   image: "/art/placeholder.png",
+  //   image: `${R2_BASE_URL}/full-size/placeholder.webp`,
+  //   thumbnail: `${R2_BASE_URL}/thumbnails/placeholder_thumb.webp`,
   //   description: "Placeholder description",
   //   date: "01 January 2000",
   //   software: "Other",
@@ -670,7 +702,8 @@ export const myArtwork: Artwork[] = [
   // {
   //   id: "27",
   //   title: "Placeholder 27",
-  //   image: "/art/placeholder.png",
+  //   image: `${R2_BASE_URL}/full-size/placeholder.webp`,
+  //   thumbnail: `${R2_BASE_URL}/thumbnails/placeholder_thumb.webp`,
   //   description: "Placeholder description",
   //   date: "01 January 2000",
   //   software: "Other",
@@ -681,7 +714,8 @@ export const myArtwork: Artwork[] = [
   // {
   //   id: "26",
   //   title: "Placeholder 26",
-  //   image: "/art/placeholder.png",
+  //   image: `${R2_BASE_URL}/full-size/placeholder.webp`,
+  //   thumbnail: `${R2_BASE_URL}/thumbnails/placeholder_thumb.webp`,
   //   description: "Placeholder description",
   //   date: "01 January 2000",
   //   software: "Other",
@@ -692,7 +726,8 @@ export const myArtwork: Artwork[] = [
   // {
   //   id: "25",
   //   title: "Placeholder 25",
-  //   image: "/art/placeholder.png",
+  //   image: `${R2_BASE_URL}/full-size/placeholder.webp`,
+  //   thumbnail: `${R2_BASE_URL}/thumbnails/placeholder_thumb.webp`,
   //   description: "Placeholder description",
   //   date: "01 January 2000",
   //   software: "Other",
@@ -703,7 +738,8 @@ export const myArtwork: Artwork[] = [
   // {
   //   id: "24",
   //   title: "Placeholder 24",
-  //   image: "/art/placeholder.png",
+  //   image: `${R2_BASE_URL}/full-size/placeholder.webp`,
+  //   thumbnail: `${R2_BASE_URL}/thumbnails/placeholder_thumb.webp`,
   //   description: "Placeholder description",
   //   date: "01 January 2000",
   //   software: "Other",
@@ -714,7 +750,8 @@ export const myArtwork: Artwork[] = [
   // {
   //   id: "23",
   //   title: "Placeholder 23",
-  //   image: "/art/placeholder.png",
+  //   image: `${R2_BASE_URL}/full-size/placeholder.webp`,
+  //   thumbnail: `${R2_BASE_URL}/thumbnails/placeholder_thumb.webp`,
   //   description: "Placeholder description",
   //   date: "01 January 2000",
   //   software: "Other",
@@ -725,7 +762,8 @@ export const myArtwork: Artwork[] = [
   // {
   //   id: "22",
   //   title: "Placeholder 22",
-  //   image: "/art/placeholder.png",
+  //   image: `${R2_BASE_URL}/full-size/placeholder.webp`,
+  //   thumbnail: `${R2_BASE_URL}/thumbnails/placeholder_thumb.webp`,
   //   description: "Placeholder description",
   //   date: "01 January 2000",
   //   software: "Other",
@@ -736,7 +774,8 @@ export const myArtwork: Artwork[] = [
   // {
   //   id: "21",
   //   title: "Placeholder 21",
-  //   image: "/art/placeholder.png",
+  //   image: `${R2_BASE_URL}/full-size/placeholder.webp`,
+  //   thumbnail: `${R2_BASE_URL}/thumbnails/placeholder_thumb.webp`,
   //   description: "Placeholder description",
   //   date: "01 January 2000",
   //   software: "Other",
@@ -747,7 +786,8 @@ export const myArtwork: Artwork[] = [
   // {
   //   id: "20",
   //   title: "Placeholder 20",
-  //   image: "/art/placeholder.png",
+  //   image: `${R2_BASE_URL}/full-size/placeholder.webp`,
+  //   thumbnail: `${R2_BASE_URL}/thumbnails/placeholder_thumb.webp`,
   //   description: "Placeholder description",
   //   date: "01 January 2000",
   //   software: "Other",
@@ -758,7 +798,8 @@ export const myArtwork: Artwork[] = [
   // {
   //   id: "19",
   //   title: "Placeholder 19",
-  //   image: "/art/placeholder.png",
+  //   image: `${R2_BASE_URL}/full-size/placeholder.webp`,
+  //   thumbnail: `${R2_BASE_URL}/thumbnails/placeholder_thumb.webp`,
   //   description: "Placeholder description",
   //   date: "01 January 2000",
   //   software: "Other",
@@ -769,7 +810,8 @@ export const myArtwork: Artwork[] = [
   // {
   //   id: "18",
   //   title: "Placeholder 18",
-  //   image: "/art/placeholder.png",
+  //   image: `${R2_BASE_URL}/full-size/placeholder.webp`,
+  //   thumbnail: `${R2_BASE_URL}/thumbnails/placeholder_thumb.webp`,
   //   description: "Placeholder description",
   //   date: "01 January 2000",
   //   software: "Other",
@@ -780,7 +822,8 @@ export const myArtwork: Artwork[] = [
   // {
   //   id: "17",
   //   title: "Placeholder 17",
-  //   image: "/art/placeholder.png",
+  //   image: `${R2_BASE_URL}/full-size/placeholder.webp`,
+  //   thumbnail: `${R2_BASE_URL}/thumbnails/placeholder_thumb.webp`,
   //   description: "Placeholder description",
   //   date: "01 January 2000",
   //   software: "Other",
@@ -791,7 +834,8 @@ export const myArtwork: Artwork[] = [
   // {
   //   id: "16",
   //   title: "Placeholder 16",
-  //   image: "/art/placeholder.png",
+  //   image: `${R2_BASE_URL}/full-size/placeholder.webp`,
+  //   thumbnail: `${R2_BASE_URL}/thumbnails/placeholder_thumb.webp`,
   //   description: "Placeholder description",
   //   date: "01 January 2000",
   //   software: "Other",
@@ -802,7 +846,8 @@ export const myArtwork: Artwork[] = [
   // {
   //   id: "15",
   //   title: "Placeholder 15",
-  //   image: "/art/placeholder.png",
+  //   image: `${R2_BASE_URL}/full-size/placeholder.webp`,
+  //   thumbnail: `${R2_BASE_URL}/thumbnails/placeholder_thumb.webp`,
   //   description: "Placeholder description",
   //   date: "01 January 2000",
   //   software: "Other",
@@ -813,7 +858,8 @@ export const myArtwork: Artwork[] = [
   // {
   //   id: "14",
   //   title: "Placeholder 14",
-  //   image: "/art/placeholder.png",
+  //   image: `${R2_BASE_URL}/full-size/placeholder.webp`,
+  //   thumbnail: `${R2_BASE_URL}/thumbnails/placeholder_thumb.webp`,
   //   description: "Placeholder description",
   //   date: "01 January 2000",
   //   software: "Other",
@@ -824,7 +870,8 @@ export const myArtwork: Artwork[] = [
   // {
   //   id: "13",
   //   title: "Placeholder 13",
-  //   image: "/art/placeholder.png",
+  //   image: `${R2_BASE_URL}/full-size/placeholder.webp`,
+  //   thumbnail: `${R2_BASE_URL}/thumbnails/placeholder_thumb.webp`,
   //   description: "Placeholder description",
   //   date: "01 January 2000",
   //   software: "Other",
@@ -835,7 +882,8 @@ export const myArtwork: Artwork[] = [
   // {
   //   id: "12",
   //   title: "Placeholder 12",
-  //   image: "/art/placeholder.png",
+  //   image: `${R2_BASE_URL}/full-size/placeholder.webp`,
+  //   thumbnail: `${R2_BASE_URL}/thumbnails/placeholder_thumb.webp`,
   //   description: "Placeholder description",
   //   date: "01 January 2000",
   //   software: "Other",
@@ -846,7 +894,8 @@ export const myArtwork: Artwork[] = [
   // {
   //   id: "11",
   //   title: "Placeholder 11",
-  //   image: "/art/placeholder.png",
+  //   image: `${R2_BASE_URL}/full-size/placeholder.webp`,
+  //   thumbnail: `${R2_BASE_URL}/thumbnails/placeholder_thumb.webp`,
   //   description: "Placeholder description",
   //   date: "01 January 2000",
   //   software: "Other",
@@ -857,7 +906,8 @@ export const myArtwork: Artwork[] = [
   // {
   //   id: "10",
   //   title: "Placeholder 10",
-  //   image: "/art/placeholder.png",
+  //   image: `${R2_BASE_URL}/full-size/placeholder.webp`,
+  //   thumbnail: `${R2_BASE_URL}/thumbnails/placeholder_thumb.webp`,
   //   description: "Placeholder description",
   //   date: "01 January 2000",
   //   software: "Other",
@@ -868,7 +918,8 @@ export const myArtwork: Artwork[] = [
   // {
   //   id: "9",
   //   title: "Placeholder 9",
-  //   image: "/art/placeholder.png",
+  //   image: `${R2_BASE_URL}/full-size/placeholder.webp`,
+  //   thumbnail: `${R2_BASE_URL}/thumbnails/placeholder_thumb.webp`,
   //   description: "Placeholder description",
   //   date: "01 January 2000",
   //   software: "Other",
@@ -879,7 +930,8 @@ export const myArtwork: Artwork[] = [
   // {
   //   id: "8",
   //   title: "Placeholder 8",
-  //   image: "/art/placeholder.png",
+  //   image: `${R2_BASE_URL}/full-size/placeholder.webp`,
+  //   thumbnail: `${R2_BASE_URL}/thumbnails/placeholder_thumb.webp`,
   //   description: "Placeholder description",
   //   date: "01 January 2000",
   //   software: "Other",
@@ -890,7 +942,8 @@ export const myArtwork: Artwork[] = [
   // {
   //   id: "7",
   //   title: "Placeholder 7",
-  //   image: "/art/placeholder.png",
+  //   image: `${R2_BASE_URL}/full-size/placeholder.webp`,
+  //   thumbnail: `${R2_BASE_URL}/thumbnails/placeholder_thumb.webp`,
   //   description: "Placeholder description",
   //   date: "01 January 2000",
   //   software: "Other",
@@ -901,7 +954,8 @@ export const myArtwork: Artwork[] = [
   // {
   //   id: "6",
   //   title: "Placeholder 6",
-  //   image: "/art/placeholder.png",
+  //   image: `${R2_BASE_URL}/full-size/placeholder.webp`,
+  //   thumbnail: `${R2_BASE_URL}/thumbnails/placeholder_thumb.webp`,
   //   description: "Placeholder description",
   //   date: "01 January 2000",
   //   software: "Other",
@@ -912,7 +966,8 @@ export const myArtwork: Artwork[] = [
   // {
   //   id: "5",
   //   title: "Placeholder 5",
-  //   image: "/art/placeholder.png",
+  //   image: `${R2_BASE_URL}/full-size/placeholder.webp`,
+  //   thumbnail: `${R2_BASE_URL}/thumbnails/placeholder_thumb.webp`,
   //   description: "Placeholder description",
   //   date: "01 January 2000",
   //   software: "Other",
@@ -923,7 +978,8 @@ export const myArtwork: Artwork[] = [
   // {
   //   id: "4",
   //   title: "Placeholder 4",
-  //   image: "/art/placeholder.png",
+  //   image: `${R2_BASE_URL}/full-size/placeholder.webp`,
+  //   thumbnail: `${R2_BASE_URL}/thumbnails/placeholder_thumb.webp`,
   //   description: "Placeholder description",
   //   date: "01 January 2000",
   //   software: "Other",
@@ -934,7 +990,8 @@ export const myArtwork: Artwork[] = [
   // {
   //   id: "3",
   //   title: "Placeholder 3",
-  //   image: "/art/placeholder.png",
+  //   image: `${R2_BASE_URL}/full-size/placeholder.webp`,
+  //   thumbnail: `${R2_BASE_URL}/thumbnails/placeholder_thumb.webp`,
   //   description: "Placeholder description",
   //   date: "01 January 2000",
   //   software: "Other",
@@ -945,7 +1002,8 @@ export const myArtwork: Artwork[] = [
   // {
   //   id: "2",
   //   title: "Placeholder 2",
-  //   image: "/art/placeholder.png",
+  //   image: `${R2_BASE_URL}/full-size/placeholder.webp`,
+  //   thumbnail: `${R2_BASE_URL}/thumbnails/placeholder_thumb.webp`,
   //   description: "Placeholder description",
   //   date: "01 January 2000",
   //   software: "Other",
@@ -956,7 +1014,8 @@ export const myArtwork: Artwork[] = [
   // {
   //   id: "1",
   //   title: "Placeholder 1",
-  //   image: "/art/placeholder.png",
+  //   image: `${R2_BASE_URL}/full-size/placeholder.webp`,
+  //   thumbnail: `${R2_BASE_URL}/thumbnails/placeholder_thumb.webp`,
   //   description: "Placeholder description",
   //   date: "01 January 2000",
   //   software: "Other",

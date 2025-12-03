@@ -18,6 +18,10 @@ interface ArtworkCardProps {
 export function ArtworkCard({ artwork, onClick, viewMode, priority = false }: ArtworkCardProps) {
   const [imageLoaded, setImageLoaded] = useState(false)
 
+  // OPTIMIZATION: Always prefer the thumbnail for the card view
+  // If no thumbnail exists, fall back to main image
+  const displaySrc = artwork.thumbnail || artwork.image
+
   if (viewMode === "timeline") {
     return (
       <div className="flex flex-col md:flex-row gap-4 md:gap-6 group">
@@ -39,8 +43,9 @@ export function ArtworkCard({ artwork, onClick, viewMode, priority = false }: Ar
           onClick={onClick}
         >
           <div className="flex flex-col md:flex-row">
-            <div className="relative w-full md:w-72 h-100 md:h-auto flex-shrink-0 bg-muted">
-              {artwork.videoUrl && !artwork.customPreview ? (
+            <div className="relative w-full md:w-72 h-64 md:h-auto flex-shrink-0 bg-muted">
+              {artwork.videoUrl && !artwork.thumbnail ? (
+                // Only load video tag if we strictly have no thumbnail image
                 <video
                   src={artwork.videoUrl}
                   className={cn(
@@ -49,15 +54,16 @@ export function ArtworkCard({ artwork, onClick, viewMode, priority = false }: Ar
                   )}
                   muted
                   playsInline
+                  // No autoplay in timeline to save bandwidth
                   onLoadedData={() => setImageLoaded(true)}
                 />
               ) : (
                 <Image
-                  src={artwork.customPreview || artwork.image}
+                  src={displaySrc}
                   alt={artwork.title}
                   fill
                   priority={priority}
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  unoptimized={true} // Cloudflare R2 Optimization
                   className={cn(
                     "object-cover transition-all duration-500",
                     imageLoaded ? "opacity-100 scale-100" : "opacity-0 scale-95",
@@ -99,13 +105,14 @@ export function ArtworkCard({ artwork, onClick, viewMode, priority = false }: Ar
     )
   }
 
+  // GRID VIEW
   return (
     <Card
       className="group overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-xl hover:scale-[1.03] hover:-translate-y-1 border-2"
       onClick={onClick}
     >
       <div className="relative aspect-square overflow-hidden bg-muted">
-        {artwork.videoUrl && !artwork.customPreview ? (
+        {artwork.videoUrl && !artwork.thumbnail ? (
           <video
             src={artwork.videoUrl}
             className={cn(
@@ -114,15 +121,18 @@ export function ArtworkCard({ artwork, onClick, viewMode, priority = false }: Ar
             )}
             muted
             playsInline
+            loop
+            onMouseOver={(e) => e.currentTarget.play()} // Optimization: Play only on hover
+            onMouseOut={(e) => e.currentTarget.pause()}
             onLoadedData={() => setImageLoaded(true)}
           />
         ) : (
           <Image
-            src={artwork.customPreview || artwork.image}
+            src={displaySrc}
             alt={artwork.title}
             fill
             priority={priority}
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            unoptimized={true} // Cloudflare R2 Optimization
             className={cn(
               "object-cover transition-all duration-500 group-hover:scale-110",
               imageLoaded ? "opacity-100" : "opacity-0",
@@ -130,18 +140,21 @@ export function ArtworkCard({ artwork, onClick, viewMode, priority = false }: Ar
             onLoad={() => setImageLoaded(true)}
           />
         )}
+        
+        {/* Overlays */}
         {artwork.isFavorite && (
-          <div className="absolute top-3 right-3 bg-destructive/90 backdrop-blur-sm rounded-full p-2 transition-transform group-hover:scale-110">
+          <div className="absolute top-3 right-3 bg-destructive/90 backdrop-blur-sm rounded-full p-2 transition-transform group-hover:scale-110 z-10">
             <Heart className="w-4 h-4 fill-destructive-foreground text-destructive-foreground" />
           </div>
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 !rounded-none" />
-        <div className="absolute bottom-0 left-0 right-0 px-6 pb-6 pt-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300 !rounded-none">
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 !rounded-none pointer-events-none" />
+        <div className="absolute bottom-0 left-0 right-0 px-6 pb-6 pt-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300 !rounded-none pointer-events-none">
           <h3 className="text-white font-bold text-lg mb-1 text-balance !rounded-none">{artwork.title}</h3>
           <p className="text-white/80 text-xs line-clamp-2 !rounded-none">{artwork.description}</p>
         </div>
       </div>
 
+      {/* Footer Info */}
       <div className="px-2 py-1">
         <div className="flex items-center justify-between gap-2 flex-wrap">
           <div className="flex gap-2">

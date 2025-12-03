@@ -107,7 +107,7 @@
   --input: oklch(0.98 0 0);
   --ring: oklch(0.45 0.15 240);
   --radius: 0rem;
-  background-image: url("/backgrounds/windowsxp-bg.png");
+  background-image: url("https://pub-699441ce0cfb40449cc458823a3f1ed2.r2.dev/art-portfolio/backgrounds/windowsxp-bg.webp");
   background-size: cover;
   background-attachment: fixed;
   background-position: center;
@@ -169,7 +169,7 @@
   --input: oklch(0.98 0.01 200);
   --ring: oklch(0.6 0.15 200);
   --radius: 1.5rem;
-  background-image: url("/backgrounds/frutiger-aero-bg.png");
+  background-image: url("https://pub-699441ce0cfb40449cc458823a3f1ed2.r2.dev/art-portfolio/backgrounds/frutiger-aero-bg.webp");
   background-size: cover;
   background-attachment: fixed;
   background-position: center;
@@ -281,7 +281,7 @@
   --input: oklch(0.98 0.02 120);
   --ring: oklch(0.5 0.15 140);
   --radius: 1.25rem;
-  background-image: url("/backgrounds/frutiger-eco-bg.png");
+  background-image: url("https://pub-699441ce0cfb40449cc458823a3f1ed2.r2.dev/art-portfolio/backgrounds/frutiger-eco-bg.webp");
   background-size: cover;
   background-attachment: fixed;
   background-position: center;
@@ -421,7 +421,7 @@
   --input: oklch(0.98 0.02 120);
   --ring: oklch(0.5 0.15 140);
   --radius: 1.25rem;
-  background-image: url("/backgrounds/frutiger-eco-bg.png");
+  background-image: url("https://pub-699441ce0cfb40449cc458823a3f1ed2.r2.dev/art-portfolio/backgrounds/frutiger-eco-bg.webp");
   background-size: cover;
   background-attachment: fixed;
   background-position: center;
@@ -473,7 +473,7 @@
   --input: oklch(0.98 0 0);
   --ring: oklch(0.55 0.18 250);
   --radius: 0.75rem;
-  background-image: url("/backgrounds/macos-bg.png");
+  background-image: url("https://pub-699441ce0cfb40449cc458823a3f1ed2.r2.dev/art-portfolio/backgrounds/macos-bg.webp");
   background-size: cover;
   background-attachment: fixed;
   background-position: center;
@@ -521,7 +521,7 @@
   --input: oklch(0.8 0.06 115);
   --ring: oklch(0.35 0.08 120);
   --radius: 0rem;
-  background-image: url("/backgrounds/gameboy-bg.png");
+  background-image: url("https://pub-699441ce0cfb40449cc458823a3f1ed2.r2.dev/art-portfolio/backgrounds/gameboy-bg.webp");
   background-size: cover;
   background-attachment: fixed;
   background-position: center;
@@ -615,7 +615,7 @@
   --input: oklch(0.32 0.1 290);
   --ring: oklch(0.7 0.22 320);
   --radius: 1.5rem;
-  background-image: url("/backgrounds/vaporwave-bg.png");
+  background-image: url("https://pub-699441ce0cfb40449cc458823a3f1ed2.r2.dev/art-portfolio/backgrounds/vaporwave-bg.webp");
   background-size: cover;
   background-attachment: fixed;
   background-position: center;

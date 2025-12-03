@@ -35,6 +35,8 @@ export function ArtworkModal({ artwork, open, onOpenChange }: ArtworkModalProps)
   const [showVideo, setShowVideo] = useState(false)
   const [pan, setPan] = useState({ x: 0, y: 0 })
   const [isDragging, setIsDragging] = useState(false)
+  
+  // Optimization: Track high-res loading to show blur placeholder
   const [isHighQualityLoaded, setIsHighQualityLoaded] = useState(false)
   
   const imageRef = useRef<HTMLDivElement>(null)
@@ -49,9 +51,17 @@ export function ArtworkModal({ artwork, open, onOpenChange }: ArtworkModalProps)
   }
   const displayArtwork = artwork || lastArtworkRef.current
 
-  const allImages = displayArtwork?.images || (displayArtwork?.image ? [displayArtwork.image] : [])
+  // OPTIMIZATION: Combine main image with any extra images
+  const allImages = displayArtwork 
+    ? [displayArtwork.image, ...(displayArtwork.images || [])] 
+    : [];
+
   const hasMultipleImages = allImages.length > 1
   const hasVideo = !!displayArtwork?.videoUrl
+
+  // Optimization: Get the thumbnail for the CURRENT image 
+  // (Assuming single thumbnail typically corresponds to the main image at index 0)
+  const currentThumbnail = currentImageIndex === 0 ? displayArtwork?.thumbnail : undefined;
 
   const handleCelebrate = () => {
     const duration = 4000
@@ -141,6 +151,7 @@ export function ArtworkModal({ artwork, open, onOpenChange }: ArtworkModalProps)
     setIsDragging(false)
   }
 
+  // Reset state when modal opens/closes
   useEffect(() => {
     if (!open) {
       setShowSpotlight(false)
@@ -152,6 +163,7 @@ export function ArtworkModal({ artwork, open, onOpenChange }: ArtworkModalProps)
     setIsHighQualityLoaded(false)
   }, [open])
 
+  // Reset loading state when changing slides
   useEffect(() => {
     setIsHighQualityLoaded(false)
   }, [currentImageIndex])
@@ -199,13 +211,14 @@ export function ArtworkModal({ artwork, open, onOpenChange }: ArtworkModalProps)
                       alt={displayArtwork.title}
                       fill
                       className="object-contain"
-                      unoptimized
+                      unoptimized={true}
                       priority
                     />
                   ) : (
                     <video 
                       src={displayArtwork.videoUrl} 
-                      poster={displayArtwork.image && !displayArtwork.image.endsWith('.mp4') ? displayArtwork.image : undefined}
+                      // Fallback poster logic
+                      poster={displayArtwork.thumbnail || (displayArtwork.image && !displayArtwork.image.endsWith('.mp4') ? displayArtwork.image : undefined)}
                       controls 
                       className="w-full h-full object-contain" 
                     />
@@ -218,33 +231,35 @@ export function ArtworkModal({ artwork, open, onOpenChange }: ArtworkModalProps)
                   />
                 ) : (
                   <>
-                    {/* Low quality placeholder (matches grid card for cache hit) */}
-                    <Image
-                      key={`placeholder-${currentImageIndex}`}
-                      src={allImages[currentImageIndex]}
-                      alt={`${displayArtwork.title} - Placeholder`}
-                      fill
-                      className={`object-contain ${isDragging ? "" : "transition-transform duration-300"}`}
-                      style={{
-                        transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoomLevel})`
-                      }}
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      priority
-                    />
+                    {/* OPTIMIZATION: Blur-Up Effect */}
+                    {/* 1. Low Quality Thumbnail (Immediate, Blurred) */}
+                    {!isHighQualityLoaded && currentThumbnail && (
+                      <Image
+                        key={`thumb-${currentImageIndex}`}
+                        src={currentThumbnail}
+                        alt="Loading Preview"
+                        fill
+                        unoptimized={true}
+                        // Scale and Blur make the low-res look intentional
+                        className="object-contain blur-xl scale-105 opacity-50"
+                        priority
+                      />
+                    )}
                     
-                    {/* High quality version */}
+                    {/* 2. High Quality Version (Fades In) */}
                     <Image
                       key={`highres-${currentImageIndex}`}
                       src={allImages[currentImageIndex]}
                       alt={`${displayArtwork.title} - Image ${currentImageIndex + 1}`}
                       fill
-                      className={`object-contain ${isDragging ? "" : "transition-transform duration-300"} ${isHighQualityLoaded ? "opacity-100" : "opacity-0"}`}
+                      className={`object-contain ${isDragging ? "" : "transition-transform duration-300"} transition-opacity duration-500 ${
+                        isHighQualityLoaded ? "opacity-100" : "opacity-0"
+                      }`}
                       style={{
                         transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoomLevel})`
                       }}
-                      priority
-                      quality={100}
-                      sizes="(max-width: 1024px) 95vw, 60vw"
+                      priority={true} // Priority loading for the modal
+                      unoptimized={true} // Cloudflare R2
                       draggable={false}
                       onLoad={() => setIsHighQualityLoaded(true)}
                     />
@@ -271,6 +286,7 @@ export function ArtworkModal({ artwork, open, onOpenChange }: ArtworkModalProps)
                 </div>
               )}
 
+              {/* Navigation Arrows */}
               {hasMultipleImages && (
                 <>
                   <Button
@@ -303,6 +319,7 @@ export function ArtworkModal({ artwork, open, onOpenChange }: ArtworkModalProps)
               )}
             </div>
 
+            {/* Sidebar Content */}
             <div className="flex flex-col p-4 sm:p-6 lg:p-8 overflow-visible lg:overflow-y-auto flex-none lg:flex-1 lg:h-full bg-card/95 backdrop-blur-sm">
               <div className="flex-1 space-y-3 sm:space-y-4 lg:space-y-6">
                 <div className="flex items-start gap-3 lg:pr-16">

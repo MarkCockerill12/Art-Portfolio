@@ -2,8 +2,9 @@ export interface Artwork {
   id: string
   title: string
   image: string
-  images?: string[] // Support multiple images
-  videoUrl?: string // Added video support for artworks
+  thumbnail?: string // New standard for grid/previews
+  images?: string[]  // Now represents only ADDITIONAL images, not duplicates
+  videoUrl?: string
   description: string
   date: string
   software?: "Procreate" | "Blender" | "Krita" | "Sketchbook" | "Gale" | "Other"
@@ -21,7 +22,6 @@ export interface Artwork {
   isFavorite: boolean
   timeTaken?: string
   isCollab?: boolean
-  customPreview?: string
 }
 
 export type Theme =
