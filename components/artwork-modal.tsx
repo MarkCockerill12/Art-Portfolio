@@ -223,9 +223,8 @@ export function ArtworkModal({ artwork, open, onOpenChange }: ArtworkModalProps)
                         src={currentThumbnail}
                         alt="Loading Preview"
                         fill
-                        unoptimized={true}
-                        className={`object-contain transition-opacity duration-500 ${
-                          isHighQualityLoaded ? "opacity-0 delay-500" : "opacity-100"
+                        className={`object-contain transition-opacity duration-500 delay-300 ${
+                          isHighQualityLoaded ? "opacity-0" : "opacity-100"
                         }`}
                         priority
                       />
@@ -236,7 +235,8 @@ export function ArtworkModal({ artwork, open, onOpenChange }: ArtworkModalProps)
                       src={allImages[currentImageIndex]}
                       alt={`${displayArtwork.title} - Image ${currentImageIndex + 1}`}
                       fill
-                      unoptimized={true}
+                      quality={90}
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1600px"
                       className={`object-contain transition-opacity duration-500 ${
                         isHighQualityLoaded ? "opacity-100" : "opacity-0"
                       }`}
