@@ -12,6 +12,8 @@ import type { ViewMode, Artwork } from "@/lib/types"
 import { useKonami } from "@/lib/konami-context"
 import { cn } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
+import { VirtuosoGrid } from "react-virtuoso"
+
 
 export default function GalleryPage() {
   const [viewMode, setViewMode] = useState<ViewMode>("grid")
@@ -69,6 +71,7 @@ export default function GalleryPage() {
     return result
   }, [filters, sortBy, allArtwork])
 
+
   return (
     <div className="min-h-screen">
       <Navbar />
@@ -107,16 +110,43 @@ export default function GalleryPage() {
             <p className="text-muted-foreground">Try adjusting your filters to see more results</p>
           </div>
         ) : viewMode === "grid" ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredAndSortedArtwork.map((item, index) => (
-              <ArtworkCard
-                key={item.id}
-                artwork={item}
-                viewMode="grid"
-                onClick={() => setSelectedArtwork(item)}
-                priority={index < 4}
-              />
-            ))}
+          <div className="w-full min-h-[500px]">
+            <VirtuosoGrid
+              useWindowScroll
+              totalCount={filteredAndSortedArtwork.length}
+              overscan={200}
+              components={{
+                List: ({ style, children, ...props }: any) => (
+                  <div
+                    {...props}
+                    style={{ ...style, display: "flex", flexWrap: "wrap", gap: "1.5rem" }}
+                    className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+                  >
+                    {children}
+                  </div>
+                ),
+                Item: ({ children, ...props }: any) => (
+                  <div
+                    {...props}
+                    className="w-full sm:w-[calc(50%-0.75rem)] lg:w-[calc(33.333%-1rem)] mb-6"
+                    style={{ ...props.style, margin: 0 }}
+                  >
+                    {children}
+                  </div>
+                ),
+              }}
+              itemContent={(index) => {
+                const item = filteredAndSortedArtwork[index]
+                return (
+                  <ArtworkCard
+                    artwork={item}
+                    viewMode="grid"
+                    onClick={() => setSelectedArtwork(item)}
+                    priority={index < 4}
+                  />
+                )
+              }}
+            />
           </div>
         ) : (
           <div className="relative max-w-6xl mx-auto p-4">

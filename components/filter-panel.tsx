@@ -85,7 +85,7 @@ export function FilterPanel({ filters, onFilterChange }: FilterPanelProps) {
 
   return (
     <div className="flex flex-wrap gap-2 items-center">
-      <Popover>
+      <Popover modal={false}>
         <PopoverTrigger asChild>
           <Button variant="outline" size="sm" className="transition-all duration-200 bg-transparent">
             <Filter className="w-4 h-4 mr-2" />
@@ -121,7 +121,7 @@ export function FilterPanel({ filters, onFilterChange }: FilterPanelProps) {
         </PopoverContent>
       </Popover>
 
-      <Popover>
+      <Popover modal={false}>
         <PopoverTrigger asChild>
           <Button variant="outline" size="sm" className="transition-all duration-200 bg-transparent">
             <Filter className="w-4 h-4 mr-2" />
@@ -157,7 +157,7 @@ export function FilterPanel({ filters, onFilterChange }: FilterPanelProps) {
         </PopoverContent>
       </Popover>
 
-      <DropdownMenu>
+      <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
           <Button
             variant={filters.isDigital !== null ? "default" : "outline"}

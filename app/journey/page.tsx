@@ -160,16 +160,15 @@ export default function JourneyPage() {
                     {/* Content card */}
                     <div
                       className={`w-full md:w-[calc(50%-2rem)] ml-20 md:ml-0 ${
-                        isEven ? "md:text-right md:pr-12" : "md:pl-12"
-                      }`}
+                        isEven                       }`}
                     >
                       <Card className="p-6 transition-all duration-300 hover:shadow-lg hover:scale-[1.02]">
-                        <div className="mb-3">
-                          <Badge className={`bg-gradient-to-r ${event.color} text-white border-0 mb-2`}>
+                        <div className="flex items-center gap-3 mb-3">
+                          <Badge className={`bg-gradient-to-r ${event.color} text-white border-0`}>
                             {event.year}
                           </Badge>
+                          <h3 className="text-xl font-bold text-balance">{event.title}</h3>
                         </div>
-                        <h3 className="text-xl font-bold mb-3 text-balance">{event.title}</h3>
                         <p className="text-muted-foreground text-sm leading-relaxed text-pretty">{event.description}</p>
                       </Card>
                     </div>

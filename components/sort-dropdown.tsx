@@ -28,7 +28,7 @@ export function SortDropdown({ sortBy, onSortChange }: SortDropdownProps) {
   }
 
   return (
-    <DropdownMenu>
+    <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="sm" className="transition-all duration-200 bg-background/60 backdrop-blur-md border-border/50">
           <ArrowUpDown className="w-4 h-4 mr-2" />

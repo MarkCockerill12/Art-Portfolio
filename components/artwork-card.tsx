@@ -47,12 +47,11 @@ export function ArtworkCard({ artwork, onClick, viewMode, priority = false }: Ar
           <div className="flex flex-col md:flex-row">
             <div className="relative w-full md:w-72 h-64 md:h-auto flex-shrink-0 bg-muted">
               {/* Always render Image as base layer */}
-              <Image
-                src={displaySrc}
+                            <Image
+                src={displaySrc || "/placeholder.svg"}
                 alt={artwork.title}
                 fill
                 priority={priority}
-                unoptimized={true}
                 className={cn(
                   "object-cover transition-opacity duration-500",
                   imageLoaded ? "opacity-100" : "opacity-0"
@@ -124,7 +123,6 @@ export function ArtworkCard({ artwork, onClick, viewMode, priority = false }: Ar
           alt={artwork.title}
           fill
           priority={priority}
-          unoptimized={true}
           className={cn(
             "object-cover transition-transform duration-500 group-hover:scale-110",
             imageLoaded ? "opacity-100" : "opacity-0",
