@@ -7,18 +7,16 @@ import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/compone
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Artwork } from "@/lib/types"
-import confetti from "canvas-confetti"
 import { 
   ZoomIn, 
   ZoomOut, 
   Heart, 
   ChevronLeft, 
   ChevronRight, 
-  Play, 
   Palette, 
   Calendar, 
   Sparkles, 
-  X,
+  X, 
   Clock
 } from "lucide-react"
 
@@ -35,23 +33,19 @@ export function ArtworkModal({ artwork, open, onOpenChange }: ArtworkModalProps)
   const [showVideo, setShowVideo] = useState(false)
   const [pan, setPan] = useState({ x: 0, y: 0 })
   const [isDragging, setIsDragging] = useState(false)
-  
-  // Optimization: Track high-res loading to show blur placeholder
   const [isHighQualityLoaded, setIsHighQualityLoaded] = useState(false)
   
   const imageRef = useRef<HTMLDivElement>(null)
   const spotlightRef = useRef<HTMLDivElement>(null)
   const dragStartRef = useRef({ x: 0, y: 0 })
-  const lastMousePosRef = useRef({ x: 0, y: 0 })
   
-  // Keep track of the last valid artwork to display during closing animation
   const lastArtworkRef = useRef<Artwork | null>(artwork)
   if (artwork) {
     lastArtworkRef.current = artwork
   }
   const displayArtwork = artwork || lastArtworkRef.current
 
-  // OPTIMIZATION: Combine main image with any extra images
+  // Merge main image with extra gallery images
   const allImages = displayArtwork 
     ? [displayArtwork.image, ...(displayArtwork.images || [])] 
     : [];
@@ -59,18 +53,14 @@ export function ArtworkModal({ artwork, open, onOpenChange }: ArtworkModalProps)
   const hasMultipleImages = allImages.length > 1
   const hasVideo = !!displayArtwork?.videoUrl
 
-  // Optimization: Get the thumbnail for the CURRENT image 
-  // (Assuming single thumbnail typically corresponds to the main image at index 0)
+  // Thumbnail for blur-up effect
   const currentThumbnail = currentImageIndex === 0 ? displayArtwork?.thumbnail : undefined;
 
-  const handleCelebrate = () => {
+  const handleCelebrate = async () => {
+    const confetti = (await import("canvas-confetti")).default
     const duration = 4000
     const animationEnd = Date.now() + duration
     const defaults = { startVelocity: 35, spread: 360, ticks: 80, zIndex: 9999 }
-
-    function randomInRange(min: number, max: number) {
-      return Math.random() * (max - min) + min
-    }
 
     const interval: NodeJS.Timeout = setInterval(() => {
       const timeLeft = animationEnd - Date.now()
@@ -132,7 +122,6 @@ export function ArtworkModal({ artwork, open, onOpenChange }: ArtworkModalProps)
 
   const handleMouseDown = (e: React.MouseEvent) => {
     dragStartRef.current = { x: e.clientX - pan.x, y: e.clientY - pan.y }
-    lastMousePosRef.current = { x: e.clientX, y: e.clientY }
     
     if (zoomLevel > 1) {
       setIsDragging(true)
@@ -151,7 +140,6 @@ export function ArtworkModal({ artwork, open, onOpenChange }: ArtworkModalProps)
     setIsDragging(false)
   }
 
-  // Reset state when modal opens/closes
   useEffect(() => {
     if (!open) {
       setShowSpotlight(false)
@@ -163,7 +151,6 @@ export function ArtworkModal({ artwork, open, onOpenChange }: ArtworkModalProps)
     setIsHighQualityLoaded(false)
   }, [open])
 
-  // Reset loading state when changing slides
   useEffect(() => {
     setIsHighQualityLoaded(false)
   }, [currentImageIndex])
@@ -188,8 +175,8 @@ export function ArtworkModal({ artwork, open, onOpenChange }: ArtworkModalProps)
                   style={{
                     background:
                       "radial-gradient(circle at 50% -10%, rgba(255, 255, 255, 0.8) 0%, rgba(255, 215, 0, 0.3) 40%, transparent 70%)",
-                    filter: "blur(8px)",
-                    mixBlendMode: "overlay",
+                    // GPU FIX: Removed mix-blend-mode and blur filter to reduce compositing cost
+                    opacity: 0.7,
                   }}
                 />
               )}
@@ -211,13 +198,12 @@ export function ArtworkModal({ artwork, open, onOpenChange }: ArtworkModalProps)
                       alt={displayArtwork.title}
                       fill
                       className="object-contain"
-                      unoptimized={true}
+                      unoptimized={true} // GIFs should often be unoptimized to preserve animation
                       priority
                     />
                   ) : (
                     <video 
                       src={displayArtwork.videoUrl} 
-                      // Fallback poster logic
                       poster={displayArtwork.thumbnail || (displayArtwork.image && !displayArtwork.image.endsWith('.mp4') ? displayArtwork.image : undefined)}
                       controls 
                       className="w-full h-full object-contain" 
@@ -231,35 +217,33 @@ export function ArtworkModal({ artwork, open, onOpenChange }: ArtworkModalProps)
                   />
                 ) : (
                   <>
-                    {/* OPTIMIZATION: Blur-Up Effect */}
-                    {/* 1. Low Quality Thumbnail (Immediate, Blurred) */}
-                    {!isHighQualityLoaded && currentThumbnail && (
+                    {currentThumbnail && (
                       <Image
                         key={`thumb-${currentImageIndex}`}
                         src={currentThumbnail}
                         alt="Loading Preview"
                         fill
                         unoptimized={true}
-                        // Scale and Blur make the low-res look intentional
-                        className="object-contain blur-xl scale-105 opacity-50"
+                        className={`object-contain transition-opacity duration-500 ${
+                          isHighQualityLoaded ? "opacity-0 delay-500" : "opacity-100"
+                        }`}
                         priority
                       />
                     )}
                     
-                    {/* 2. High Quality Version (Fades In) */}
                     <Image
                       key={`highres-${currentImageIndex}`}
                       src={allImages[currentImageIndex]}
                       alt={`${displayArtwork.title} - Image ${currentImageIndex + 1}`}
                       fill
-                      className={`object-contain ${isDragging ? "" : "transition-transform duration-300"} transition-opacity duration-500 ${
+                      unoptimized={true}
+                      className={`object-contain transition-opacity duration-500 ${
                         isHighQualityLoaded ? "opacity-100" : "opacity-0"
                       }`}
                       style={{
                         transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoomLevel})`
                       }}
-                      priority={true} // Priority loading for the modal
-                      unoptimized={true} // Cloudflare R2
+                      priority={true}
                       draggable={false}
                       onLoad={() => setIsHighQualityLoaded(true)}
                     />
@@ -267,9 +251,9 @@ export function ArtworkModal({ artwork, open, onOpenChange }: ArtworkModalProps)
                 )}
               </div>
 
-              {/* Zoom Slider Control */}
               {!hasVideo && (
-                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 w-48 sm:w-64 bg-background/80 backdrop-blur-md px-4 py-2 rounded-full shadow-lg border border-border/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                // GPU FIX: Removed backdrop-blur
+                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 w-48 sm:w-64 bg-background/95 px-4 py-2 rounded-full shadow-lg border border-border/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <div className="flex items-center gap-3">
                     <ZoomOut className="w-4 h-4 text-muted-foreground" />
                     <Slider
@@ -286,13 +270,12 @@ export function ArtworkModal({ artwork, open, onOpenChange }: ArtworkModalProps)
                 </div>
               )}
 
-              {/* Navigation Arrows */}
               {hasMultipleImages && (
                 <>
                   <Button
                     variant="secondary"
                     size="icon"
-                    className="!absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-10 rounded-full bg-background/90 backdrop-blur-sm hover:bg-background shadow-xl h-10 w-10 sm:h-12 sm:w-12"
+                    className="!absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-10 rounded-full bg-background/90 hover:bg-background shadow-xl h-10 w-10 sm:h-12 sm:w-12"
                     onClick={(e) => {
                       e.stopPropagation()
                       handlePrevImage()
@@ -303,7 +286,7 @@ export function ArtworkModal({ artwork, open, onOpenChange }: ArtworkModalProps)
                   <Button
                     variant="secondary"
                     size="icon"
-                    className="!absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-10 rounded-full bg-background/90 backdrop-blur-sm hover:bg-background shadow-xl h-10 w-10 sm:h-12 sm:w-12"
+                    className="!absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-10 rounded-full bg-background/90 hover:bg-background shadow-xl h-10 w-10 sm:h-12 sm:w-12"
                     onClick={(e) => {
                       e.stopPropagation()
                       handleNextImage()
@@ -312,19 +295,19 @@ export function ArtworkModal({ artwork, open, onOpenChange }: ArtworkModalProps)
                     <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
                   </Button>
 
-                  <div className="absolute bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 z-10 bg-background/90 backdrop-blur-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium shadow-lg">
+                  <div className="absolute bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 z-10 bg-background/90 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium shadow-lg">
                     {currentImageIndex + 1} / {allImages.length}
                   </div>
                 </>
               )}
             </div>
 
-            {/* Sidebar Content */}
-            <div className="flex flex-col p-4 sm:p-6 lg:p-8 overflow-visible lg:overflow-y-auto flex-none lg:flex-1 lg:h-full bg-card/95 backdrop-blur-sm">
+            {/* GPU FIX: Switched bg-card/95 backdrop-blur-sm to solid bg-card */}
+            <div className="flex flex-col p-4 sm:p-6 lg:p-8 overflow-visible lg:overflow-y-auto flex-none lg:flex-1 lg:h-full bg-card">
               <div className="flex-1 space-y-3 sm:space-y-4 lg:space-y-6">
                 <div className="flex items-start gap-3 lg:pr-16">
                   {displayArtwork.isFavorite && (
-                    <div className="bg-destructive/90 backdrop-blur-sm rounded-full p-2 shrink-0 mt-1">
+                    <div className="bg-destructive/95 rounded-full p-2 shrink-0 mt-1">
                       <Heart className="w-4 h-4 sm:w-5 sm:h-5 fill-destructive-foreground text-destructive-foreground" />
                     </div>
                   )}
@@ -372,7 +355,7 @@ export function ArtworkModal({ artwork, open, onOpenChange }: ArtworkModalProps)
                 <Button
                   onClick={handleCelebrate}
                   size="lg"
-                  className="w-full group transition-all duration-300 hover:scale-105 py-4 sm:py-5 lg:py-6 text-xs sm:text-sm lg:text-base px-3 sm:px-4"
+                  className="w-full group transition-transform duration-300 hover:scale-105 py-4 sm:py-5 lg:py-6 text-xs sm:text-sm lg:text-base px-3 sm:px-4"
                 >
                   <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 mr-2 shrink-0 group-hover:rotate-12 transition-transform" />
                   <span className="truncate">Rahhh confetti</span>
@@ -384,7 +367,7 @@ export function ArtworkModal({ artwork, open, onOpenChange }: ArtworkModalProps)
             <Button
               variant="ghost"
               size="icon"
-              className="!absolute top-2 sm:top-3 lg:top-4 right-2 sm:right-3 lg:right-4 z-50 rounded-full bg-background/90 backdrop-blur-sm hover:bg-background shadow-xl h-10 w-10 sm:h-11 sm:w-11"
+              className="!absolute top-2 sm:top-3 lg:top-4 right-2 sm:right-3 lg:right-4 z-50 rounded-full bg-background/90 hover:bg-background shadow-xl h-10 w-10 sm:h-11 sm:w-11"
               onClick={() => onOpenChange(false)}
             >
               <X className="w-5 h-5 sm:w-6 sm:h-6" />
