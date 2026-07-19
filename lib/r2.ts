@@ -24,7 +24,7 @@ export async function getArtworksList(): Promise<{ myArtwork: Artwork[]; secretA
     return { myArtwork: staticMyArtwork, secretArtwork: staticSecretArtwork };
   }
 
-  const url = `${process.env.R2_PUBLIC_URL}/artworks.json`;
+  const url = `${process.env.R2_PUBLIC_URL}/art-portfolio/artworks.json`;
   try {
     const res = await fetch(url, { cache: "no-store" }); // Avoid caching database state on API calls
     if (res.ok) {
@@ -54,7 +54,7 @@ export async function saveArtworksList(artworks: {
     const jsonString = JSON.stringify(artworks, null, 2);
     const command = new PutObjectCommand({
       Bucket: process.env.R2_BUCKET_NAME,
-      Key: "artworks.json",
+      Key: "art-portfolio/artworks.json",
       Body: jsonString,
       ContentType: "application/json",
       CacheControl: "no-cache, no-store, must-revalidate",
