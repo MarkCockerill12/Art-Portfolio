@@ -52,7 +52,7 @@ export async function POST(request: Request) {
       // It's a video!
       const videoBuffer = Buffer.from(await file.arrayBuffer());
       const videoExtension = file.name.split(".").pop() || "mp4";
-      const videoKey = `full-size/${baseName}.${videoExtension}`;
+      const videoKey = `art-portfolio/art/full-size/${baseName}.${videoExtension}`;
 
       // Upload raw video
       const uploadedVideoUrl = await uploadMediaToR2(videoBuffer, videoKey, fileType);
@@ -65,7 +65,7 @@ export async function POST(request: Request) {
       const previewFile = formData.get("previewFile") as File;
       if (previewFile) {
         const previewBuffer = Buffer.from(await previewFile.arrayBuffer());
-        const previewKey = `full-size/${baseName}-preview.webp`;
+        const previewKey = `art-portfolio/art/full-size/${baseName}-preview.webp`;
         const uploadedPreviewUrl = await uploadMediaToR2(previewBuffer, previewKey, "image/webp");
         imageUrl = uploadedPreviewUrl || "";
       }
@@ -74,14 +74,14 @@ export async function POST(request: Request) {
       const thumbnailFile = formData.get("thumbnailFile") as File;
       if (thumbnailFile) {
         const thumbBuffer = Buffer.from(await thumbnailFile.arrayBuffer());
-        const thumbKey = `thumbnails/${baseName}-preview_thumb.webp`;
+        const thumbKey = `art-portfolio/art/thumbnails/${baseName}-preview_thumb.webp`;
         const uploadedThumbUrl = await uploadMediaToR2(thumbBuffer, thumbKey, "image/webp");
         thumbnailUrl = uploadedThumbUrl || "";
       }
     } else {
       // It's an image! (Pre-converted to WebP by client)
       const imageBuffer = Buffer.from(await file.arrayBuffer());
-      const mainKey = `full-size/${baseName}.webp`;
+      const mainKey = `art-portfolio/art/full-size/${baseName}.webp`;
       const uploadedMainUrl = await uploadMediaToR2(imageBuffer, mainKey, "image/webp");
       if (!uploadedMainUrl) {
         return NextResponse.json({ error: "Failed to upload image to R2" }, { status: 500 });
@@ -92,7 +92,7 @@ export async function POST(request: Request) {
       const thumbnailFile = formData.get("thumbnailFile") as File;
       if (thumbnailFile) {
         const thumbBuffer = Buffer.from(await thumbnailFile.arrayBuffer());
-        const thumbKey = `thumbnails/${baseName}_thumb.webp`;
+        const thumbKey = `art-portfolio/art/thumbnails/${baseName}_thumb.webp`;
         const uploadedThumbUrl = await uploadMediaToR2(thumbBuffer, thumbKey, "image/webp");
         thumbnailUrl = uploadedThumbUrl || "";
       }
