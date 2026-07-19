@@ -26,4 +26,4 @@ jobs:
           source-dir: "public/media"        # Grabs 'art' and 'backgrounds' folders
           destination-dir: "art-portfolio"  # Puts them inside 'art-portfolio' folder
           
-          keep-file-fresh: true             # 1-to-1 Sync (deletes removed files)
+          keep-file-fresh: false            # Uploads new files without deleting web-uploaded items
