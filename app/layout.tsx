@@ -5,6 +5,7 @@ import { Analytics } from "@vercel/analytics/next"
 import { ThemeProvider } from "@/lib/theme-context"
 import { KonamiProvider } from "@/lib/konami-context"
 import { Toaster } from "@/components/ui/toaster"
+import { CookieBanner } from "@/components/cookie-banner"
 import "./globals.css"
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" })
@@ -31,6 +32,7 @@ export default function RootLayout({
           <KonamiProvider>
             {children}
             <Toaster />
+            <CookieBanner />
           </KonamiProvider>
         </ThemeProvider>
         <Analytics />

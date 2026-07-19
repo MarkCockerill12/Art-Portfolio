@@ -1,18 +1,48 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect, useCallback } from "react"
 import { Navbar } from "@/components/navbar"
 import { ArtworkCard } from "@/components/artwork-card"
 import { ArtworkModal } from "@/components/artwork-modal"
-import { myArtwork } from "@/lib/my-artwork"
+import { myArtwork as staticMyArtwork } from "@/lib/my-artwork"
 import type { Artwork } from "@/lib/types"
 
 export default function CollabPage() {
   const [selectedArtwork, setSelectedArtwork] = useState<Artwork | null>(null)
+  const [artworks, setArtworks] = useState<Artwork[]>(staticMyArtwork)
+
+  const [isAdmin, setIsAdmin] = useState(false)
+
+  // Fetch dynamic artworks list from R2 bucket
+  const loadArtworks = useCallback(async () => {
+    try {
+      const res = await fetch("/api/artworks")
+      if (res.ok) {
+        const data = await res.json()
+        if (data.myArtwork && data.myArtwork.length > 0) {
+          setArtworks(data.myArtwork)
+        }
+      }
+    } catch (err) {
+      console.error("Failed to load collab artworks dynamically", err)
+    }
+  }, [])
+
+  useEffect(() => {
+    loadArtworks()
+  }, [loadArtworks])
+
+  // Check authentication status
+  useEffect(() => {
+    fetch("/api/auth")
+      .then((res) => res.json())
+      .then((data) => setIsAdmin(data.authenticated))
+      .catch(() => setIsAdmin(false))
+  }, [])
 
   const collabArtwork = useMemo(() => {
-    return myArtwork.filter((art) => art.isCollab)
-  }, [])
+    return artworks.filter((art) => art.isCollab)
+  }, [artworks])
 
   return (
     <div className="min-h-screen">
@@ -54,6 +84,8 @@ export default function CollabPage() {
         onOpenChange={(open) => {
           if (!open) setSelectedArtwork(null)
         }}
+        isAdmin={isAdmin}
+        onArtworkUpdated={loadArtworks}
       />
     </div>
   )

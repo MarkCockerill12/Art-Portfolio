@@ -17,16 +17,39 @@ import {
   Calendar, 
   Sparkles, 
   X, 
-  Clock
+  Clock,
+  Pencil
 } from "lucide-react"
+
+// Types of Software and Genre based on lib/types.ts
+const SOFTWARE_OPTIONS = ["Procreate", "Blender", "Krita", "Sketchbook", "Gale", "Other"]
+const GENRE_OPTIONS = [
+  "Character Design",
+  "Environment",
+  "Concept Art",
+  "Fan Art",
+  "Original",
+  "Study",
+  "Illustration",
+  "Sketch",
+  "Pixel Art",
+]
 
 interface ArtworkModalProps {
   artwork: Artwork | null
   open: boolean
   onOpenChange: (open: boolean) => void
+  isAdmin?: boolean
+  onArtworkUpdated?: () => void
 }
 
-export function ArtworkModal({ artwork, open, onOpenChange }: ArtworkModalProps) {
+export function ArtworkModal({ 
+  artwork, 
+  open, 
+  onOpenChange,
+  isAdmin = false,
+  onArtworkUpdated
+}: ArtworkModalProps) {
   const [showSpotlight, setShowSpotlight] = useState(false)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [zoomLevel, setZoomLevel] = useState(1)
@@ -34,6 +57,21 @@ export function ArtworkModal({ artwork, open, onOpenChange }: ArtworkModalProps)
   const [pan, setPan] = useState({ x: 0, y: 0 })
   const [isDragging, setIsDragging] = useState(false)
   const [isHighQualityLoaded, setIsHighQualityLoaded] = useState(false)
+  
+  // Edit Mode states
+  const [isEditing, setIsEditing] = useState(false)
+  const [editTitle, setEditTitle] = useState("")
+  const [editDesc, setEditDesc] = useState("")
+  const [editDate, setEditDate] = useState("")
+  const [editSoftware, setEditSoftware] = useState("Krita")
+  const [editGenre, setEditGenre] = useState("Original")
+  const [editIsDigital, setEditIsDigital] = useState(true)
+  const [editIsFavorite, setEditIsFavorite] = useState(false)
+  const [editIsCollab, setEditIsCollab] = useState(false)
+  const [editIsSecret, setEditIsSecret] = useState(false)
+  const [editTimeTaken, setEditTimeTaken] = useState("")
+  const [isSaving, setIsSaving] = useState(false)
+  const [editError, setEditError] = useState("")
   
   const imageRef = useRef<HTMLDivElement>(null)
   const spotlightRef = useRef<HTMLDivElement>(null)
@@ -55,6 +93,23 @@ export function ArtworkModal({ artwork, open, onOpenChange }: ArtworkModalProps)
 
   // Thumbnail for blur-up effect
   const currentThumbnail = currentImageIndex === 0 ? displayArtwork?.thumbnail : undefined;
+
+  // Initialize edit form values
+  useEffect(() => {
+    if (displayArtwork) {
+      setEditTitle(displayArtwork.title)
+      setEditDesc(displayArtwork.description)
+      setEditDate(displayArtwork.date)
+      setEditSoftware(displayArtwork.software || "Krita")
+      setEditGenre(displayArtwork.genre || "Original")
+      setEditIsDigital(displayArtwork.isDigital)
+      setEditIsFavorite(displayArtwork.isFavorite)
+      setEditIsCollab(displayArtwork.isCollab || false)
+      setEditIsSecret(displayArtwork.isSecret || false)
+      setEditTimeTaken(displayArtwork.timeTaken || "")
+    }
+    setEditError("")
+  }, [displayArtwork, isEditing])
 
   const handleCelebrate = async () => {
     const confetti = (await import("canvas-confetti")).default
@@ -140,6 +195,51 @@ export function ArtworkModal({ artwork, open, onOpenChange }: ArtworkModalProps)
     setIsDragging(false)
   }
 
+  // Handle Save changes PUT request
+  const handleSaveChanges = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!displayArtwork) return
+    setIsSaving(true)
+    setEditError("")
+
+    try {
+      const updatedArtwork: Artwork = {
+        ...displayArtwork,
+        title: editTitle,
+        description: editDesc,
+        date: editDate,
+        software: editSoftware as any,
+        genre: editGenre as any,
+        isDigital: editIsDigital,
+        isFavorite: editIsFavorite,
+        isCollab: editIsCollab,
+        isSecret: editIsSecret,
+        timeTaken: editTimeTaken || undefined,
+      }
+
+      const res = await fetch("/api/artworks", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ updatedArtwork }),
+      })
+
+      if (res.ok) {
+        setIsEditing(false)
+        onArtworkUpdated?.()
+        // Celebrate success
+        const confetti = (await import("canvas-confetti")).default
+        confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 } })
+      } else {
+        const data = await res.json()
+        setEditError(data.error || "Failed to update artwork")
+      }
+    } catch (err) {
+      setEditError("Failed to communicate with API server")
+    } finally {
+      setIsSaving(false)
+    }
+  }
+
   useEffect(() => {
     if (!open) {
       setShowSpotlight(false)
@@ -147,6 +247,7 @@ export function ArtworkModal({ artwork, open, onOpenChange }: ArtworkModalProps)
       setZoomLevel(1)
       setShowVideo(false)
       setPan({ x: 0, y: 0 })
+      setIsEditing(false)
     }
     setIsHighQualityLoaded(false)
   }, [open])
@@ -175,7 +276,6 @@ export function ArtworkModal({ artwork, open, onOpenChange }: ArtworkModalProps)
                   style={{
                     background:
                       "radial-gradient(circle at 50% -10%, rgba(255, 255, 255, 0.8) 0%, rgba(255, 215, 0, 0.3) 40%, transparent 70%)",
-                    // GPU FIX: Removed mix-blend-mode and blur filter to reduce compositing cost
                     opacity: 0.7,
                   }}
                 />
@@ -198,7 +298,7 @@ export function ArtworkModal({ artwork, open, onOpenChange }: ArtworkModalProps)
                       alt={displayArtwork.title}
                       fill
                       className="object-contain"
-                      unoptimized={true} // GIFs should often be unoptimized to preserve animation
+                      unoptimized={true}
                       priority
                     />
                   ) : (
@@ -252,7 +352,6 @@ export function ArtworkModal({ artwork, open, onOpenChange }: ArtworkModalProps)
               </div>
 
               {!hasVideo && (
-                // GPU FIX: Removed backdrop-blur
                 <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 w-48 sm:w-64 bg-background/95 px-4 py-2 rounded-full shadow-lg border border-border/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <div className="flex items-center gap-3">
                     <ZoomOut className="w-4 h-4 text-muted-foreground" />
@@ -302,67 +401,238 @@ export function ArtworkModal({ artwork, open, onOpenChange }: ArtworkModalProps)
               )}
             </div>
 
-            {/* GPU FIX: Switched bg-card/95 backdrop-blur-sm to solid bg-card */}
-            <div className="flex flex-col p-4 sm:p-6 lg:p-8 overflow-visible lg:overflow-y-auto flex-none lg:flex-1 lg:h-full bg-card">
-              <div className="flex-1 space-y-3 sm:space-y-4 lg:space-y-6">
-                <div className="flex items-start gap-3 lg:pr-16">
-                  {displayArtwork.isFavorite && (
-                    <div className="bg-destructive/95 rounded-full p-2 shrink-0 mt-1">
-                      <Heart className="w-4 h-4 sm:w-5 sm:h-5 fill-destructive-foreground text-destructive-foreground" />
+            {/* Right column details / editing form */}
+            {isEditing ? (
+              <div className="flex flex-col p-4 sm:p-6 lg:p-8 overflow-visible lg:overflow-y-auto flex-none lg:flex-1 lg:h-full bg-card">
+                <form onSubmit={handleSaveChanges} className="flex-1 space-y-4 flex flex-col justify-between">
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-bold">Edit Artwork Details</h3>
+                    
+                    {/* Title */}
+                    <div className="space-y-1">
+                      <label className="text-xs font-semibold text-muted-foreground">Title</label>
+                      <input
+                        type="text"
+                        value={editTitle}
+                        onChange={(e) => setEditTitle(e.target.value)}
+                        className="bg-background border border-border rounded-lg px-3 py-2 text-sm text-foreground w-full focus:outline-none focus:ring-1 focus:ring-primary"
+                        required
+                      />
                     </div>
-                  )}
-                  <h2 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold text-balance leading-tight">
-                    {displayArtwork.title}
-                  </h2>
-                </div>
 
-                <div className="space-y-2 sm:space-y-3">
-                  <div className="flex flex-wrap gap-2">
-                    <Badge variant="secondary" className="text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-1.5">
-                      <Palette className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
-                      {displayArtwork.software}
-                    </Badge>
-                    <Badge variant="outline" className="text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-1.5">
-                      {displayArtwork.genre}
-                    </Badge>
-                    {displayArtwork.isDigital && (
-                      <Badge variant="outline" className="text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-1.5">
-                        Digital
-                      </Badge>
-                    )}
+                    {/* Description */}
+                    <div className="space-y-1">
+                      <label className="text-xs font-semibold text-muted-foreground">Description</label>
+                      <textarea
+                        value={editDesc}
+                        onChange={(e) => setEditDesc(e.target.value)}
+                        rows={4}
+                        className="bg-background border border-border rounded-lg px-3 py-2 text-sm text-foreground w-full focus:outline-none focus:ring-1 focus:ring-primary resize-none leading-relaxed"
+                        required
+                      />
+                    </div>
+
+                    {/* Software & Genre */}
+                    <div className="grid grid-cols-2 gap-2">
+                      <div className="space-y-1">
+                        <label className="text-xs font-semibold text-muted-foreground">Software</label>
+                        <select
+                          value={editSoftware}
+                          onChange={(e) => setEditSoftware(e.target.value)}
+                          className="bg-background border border-border rounded-lg px-3 py-2 text-sm text-foreground w-full focus:outline-none focus:ring-1 focus:ring-primary"
+                        >
+                          {SOFTWARE_OPTIONS.map((opt) => (
+                            <option key={opt} value={opt}>{opt}</option>
+                          ))}
+                        </select>
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-xs font-semibold text-muted-foreground">Genre</label>
+                        <select
+                          value={editGenre}
+                          onChange={(e) => setEditGenre(e.target.value)}
+                          className="bg-background border border-border rounded-lg px-3 py-2 text-sm text-foreground w-full focus:outline-none focus:ring-1 focus:ring-primary"
+                        >
+                          {GENRE_OPTIONS.map((opt) => (
+                            <option key={opt} value={opt}>{opt}</option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+
+                    {/* Date & Time taken */}
+                    <div className="grid grid-cols-2 gap-2">
+                      <div className="space-y-1">
+                        <label className="text-xs font-semibold text-muted-foreground">Date</label>
+                        <input
+                          type="text"
+                          value={editDate}
+                          onChange={(e) => setEditDate(e.target.value)}
+                          className="bg-background border border-border rounded-lg px-3 py-2 text-sm text-foreground w-full focus:outline-none focus:ring-1 focus:ring-primary"
+                          required
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-xs font-semibold text-muted-foreground">Time Taken</label>
+                        <input
+                          type="text"
+                          value={editTimeTaken}
+                          onChange={(e) => setEditTimeTaken(e.target.value)}
+                          className="bg-background border border-border rounded-lg px-3 py-2 text-sm text-foreground w-full focus:outline-none focus:ring-1 focus:ring-primary"
+                          placeholder="e.g. 5h 49m"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Checkbox settings flags */}
+                    <div className="grid grid-cols-2 gap-3 pt-2">
+                      <label className="flex items-center gap-2 cursor-pointer select-none">
+                        <input
+                          type="checkbox"
+                          checked={editIsDigital}
+                          onChange={(e) => setEditIsDigital(e.target.checked)}
+                          className="w-4 h-4 rounded border-border"
+                        />
+                        <span className="text-xs font-medium">Digital</span>
+                      </label>
+
+                      <label className="flex items-center gap-2 cursor-pointer select-none">
+                        <input
+                          type="checkbox"
+                          checked={editIsFavorite}
+                          onChange={(e) => setEditIsFavorite(e.target.checked)}
+                          className="w-4 h-4 rounded border-border"
+                        />
+                        <span className="text-xs font-medium">Favorite</span>
+                      </label>
+
+                      <label className="flex items-center gap-2 cursor-pointer select-none">
+                        <input
+                          type="checkbox"
+                          checked={editIsCollab}
+                          onChange={(e) => setEditIsCollab(e.target.checked)}
+                          className="w-4 h-4 rounded border-border"
+                        />
+                        <span className="text-xs font-medium">Collab</span>
+                      </label>
+
+                      <label className="flex items-center gap-2 cursor-pointer select-none">
+                        <input
+                          type="checkbox"
+                          checked={editIsSecret}
+                          onChange={(e) => setEditIsSecret(e.target.checked)}
+                          className="w-4 h-4 rounded border-border"
+                        />
+                        <span className="text-xs font-medium">Secret (Easter Egg)</span>
+                      </label>
+                    </div>
                   </div>
 
-                  <div className="flex items-center gap-4 text-xs sm:text-sm text-muted-foreground flex-wrap">
-                    <div className="flex items-center gap-2">
-                      <Calendar className="w-3 h-3 sm:w-4 sm:h-4" />
-                      <span>{displayArtwork.date}</span>
-                    </div>
-                    {displayArtwork.timeTaken && (
-                      <div className="flex items-center gap-2">
-                        <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
-                        <span>{displayArtwork.timeTaken}</span>
+                  {editError && (
+                    <p className="text-destructive text-xs font-semibold bg-destructive/10 p-2 rounded-lg text-center">
+                      ❌ {editError}
+                    </p>
+                  )}
+
+                  <div className="flex gap-2 pt-4">
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      onClick={() => setIsEditing(false)}
+                      className="flex-1 text-xs"
+                      disabled={isSaving}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      type="submit"
+                      className="flex-1 text-xs font-semibold"
+                      disabled={isSaving}
+                    >
+                      {isSaving ? "Saving..." : "Save Changes"}
+                    </Button>
+                  </div>
+                </form>
+              </div>
+            ) : (
+              <div className="flex flex-col p-4 sm:p-6 lg:p-8 overflow-visible lg:overflow-y-auto flex-none lg:flex-1 lg:h-full bg-card">
+                <div className="flex-1 space-y-3 sm:space-y-4 lg:space-y-6">
+                  <div className="flex items-start gap-3 lg:pr-16">
+                    {displayArtwork.isFavorite && (
+                      <div className="bg-destructive/95 rounded-full p-2 shrink-0 mt-1">
+                        <Heart className="w-4 h-4 sm:w-5 sm:h-5 fill-destructive-foreground text-destructive-foreground" />
                       </div>
                     )}
+                    <div className="flex-1 flex items-start justify-between gap-2">
+                      <h2 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold text-balance leading-tight">
+                        {displayArtwork.title}
+                      </h2>
+                      {isAdmin && (
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => setIsEditing(true)}
+                          className="text-muted-foreground hover:text-foreground hover:bg-muted shrink-0 rounded-full h-8 w-8"
+                          title="Edit Artwork Details"
+                        >
+                          <Pencil className="w-4 h-4" />
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="space-y-2 sm:space-y-3">
+                    <div className="flex flex-wrap gap-2">
+                      <Badge variant="secondary" className="text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-1.5">
+                        <Palette className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+                        {displayArtwork.software}
+                      </Badge>
+                      <Badge variant="outline" className="text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-1.5">
+                        {displayArtwork.genre}
+                      </Badge>
+                      {displayArtwork.isDigital && (
+                        <Badge variant="outline" className="text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-1.5">
+                          Digital
+                        </Badge>
+                      )}
+                      {displayArtwork.isSecret && (
+                        <Badge variant="secondary" className="text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-1.5 bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 border-yellow-500/20">
+                          Secret Easter Egg
+                        </Badge>
+                      )}
+                    </div>
+
+                    <div className="flex items-center gap-4 text-xs sm:text-sm text-muted-foreground flex-wrap">
+                      <div className="flex items-center gap-2">
+                        <Calendar className="w-3 h-3 sm:w-4 sm:h-4" />
+                        <span>{displayArtwork.date}</span>
+                      </div>
+                      {displayArtwork.timeTaken && (
+                        <div className="flex items-center gap-2">
+                          <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
+                          <span>{displayArtwork.timeTaken}</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="prose prose-sm sm:prose-base dark:prose-invert max-w-none">
+                    <p className="text-muted-foreground leading-relaxed text-sm sm:text-base">{displayArtwork.description}</p>
                   </div>
                 </div>
 
-                <div className="prose prose-sm sm:prose-base dark:prose-invert max-w-none">
-                  <p className="text-muted-foreground leading-relaxed text-sm sm:text-base">{displayArtwork.description}</p>
+                <div className="mt-4 sm:mt-6 space-y-2 sm:space-y-3">
+                  <Button
+                    onClick={handleCelebrate}
+                    size="lg"
+                    className="w-full group transition-transform duration-300 hover:scale-105 py-4 sm:py-5 lg:py-6 text-xs sm:text-sm lg:text-base px-3 sm:px-4"
+                  >
+                    <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 mr-2 shrink-0 group-hover:rotate-12 transition-transform" />
+                    <span className="truncate">Rahhh confetti</span>
+                  </Button>
                 </div>
               </div>
-
-              <div className="mt-4 sm:mt-6 space-y-2 sm:space-y-3">
-                <Button
-                  onClick={handleCelebrate}
-                  size="lg"
-                  className="w-full group transition-transform duration-300 hover:scale-105 py-4 sm:py-5 lg:py-6 text-xs sm:text-sm lg:text-base px-3 sm:px-4"
-                >
-                  <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 mr-2 shrink-0 group-hover:rotate-12 transition-transform" />
-                  <span className="truncate">Rahhh confetti</span>
-                </Button>
-
-              </div>
-            </div>
+            )}
 
             <Button
               variant="ghost"

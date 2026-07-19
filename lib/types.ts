@@ -22,6 +22,7 @@ export interface Artwork {
   isFavorite: boolean
   timeTaken?: string
   isCollab?: boolean
+  isSecret?: boolean
 }
 
 export type Theme =

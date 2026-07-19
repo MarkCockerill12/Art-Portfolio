@@ -1,13 +1,14 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect, useCallback } from "react"
+import { useRouter } from "next/navigation"
 import { Navbar } from "@/components/navbar"
 import { ArtworkCard } from "@/components/artwork-card"
 import { ViewModeToggle } from "@/components/view-mode-toggle"
 import { ArtworkModal } from "@/components/artwork-modal"
 import { FilterPanel } from "@/components/filter-panel"
 import { SortDropdown, type SortOption } from "@/components/sort-dropdown"
-import { myArtwork, secretArtwork } from "@/lib/my-artwork"
+import { myArtwork as staticMyArtwork, secretArtwork as staticSecretArtwork } from "@/lib/my-artwork"
 import type { ViewMode, Artwork } from "@/lib/types"
 import { useKonami } from "@/lib/konami-context"
 import { cn } from "@/lib/utils"
@@ -20,6 +21,12 @@ export default function GalleryPage() {
   const [selectedArtwork, setSelectedArtwork] = useState<Artwork | null>(null)
   const [sortBy, setSortBy] = useState<SortOption>("date-desc")
   const { konamiUnlocked } = useKonami()
+  const router = useRouter()
+
+  const [artworks, setArtworks] = useState({
+    myArtwork: staticMyArtwork,
+    secretArtwork: staticSecretArtwork,
+  })
 
   const [filters, setFilters] = useState({
     software: [] as string[],
@@ -28,9 +35,48 @@ export default function GalleryPage() {
     favoritesOnly: false,
   })
 
+  // Detect ?admin query parameter
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    if (params.has("admin")) {
+      router.push("/admin")
+    }
+  }, [router])
+
+  const [isAdmin, setIsAdmin] = useState(false)
+
+  // Fetch dynamic artworks list from R2 bucket
+  const loadArtworks = useCallback(async () => {
+    try {
+      const res = await fetch("/api/artworks")
+      if (res.ok) {
+        const data = await res.json()
+        if (data.myArtwork && data.myArtwork.length > 0) {
+          setArtworks(data)
+        }
+      }
+    } catch (err) {
+      console.error("Failed to load artworks catalog dynamically", err)
+    }
+  }, [])
+
+  useEffect(() => {
+    loadArtworks()
+  }, [loadArtworks])
+
+  // Check authentication status
+  useEffect(() => {
+    fetch("/api/auth")
+      .then((res) => res.json())
+      .then((data) => setIsAdmin(data.authenticated))
+      .catch(() => setIsAdmin(false))
+  }, [])
+
   const allArtwork = useMemo(() => {
-    return konamiUnlocked ? [...myArtwork, ...secretArtwork] : myArtwork
-  }, [konamiUnlocked])
+    return konamiUnlocked
+      ? [...artworks.myArtwork, ...artworks.secretArtwork]
+      : artworks.myArtwork
+  }, [konamiUnlocked, artworks])
 
   const filteredAndSortedArtwork = useMemo(() => {
     let result = [...allArtwork]
@@ -199,6 +245,8 @@ export default function GalleryPage() {
         onOpenChange={(open) => {
           if (!open) setSelectedArtwork(null)
         }}
+        isAdmin={isAdmin}
+        onArtworkUpdated={loadArtworks}
       />
     </div>
   )
